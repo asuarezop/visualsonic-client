@@ -1,0 +1,36 @@
+@use "./typography" as *;
+@use "./mixins" as *;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  list-style-type: none;
+  display: inline-block;
+}
+
+li {
+  list-style: none;
+}
+
+span {
+  text-decoration: none;
+}
+
+button {
+  border: 0 none;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+input,
+select {
+  outline: none;
+}
