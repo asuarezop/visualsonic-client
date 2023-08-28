@@ -12,7 +12,11 @@ FONT SIZE SYSTEM (px)
 */
 
 .header {
-  padding: 1rem;
+  padding: 1.5rem;
+
+  @include desktop {
+    padding: 2rem;
+  }
 
   .nav {
     margin: 0 1rem;
@@ -22,6 +26,8 @@ FONT SIZE SYSTEM (px)
     flex-direction: column;
 
     @include tablet {
+      flex-direction: row;
+      margin: 0;
     }
 
     .nav-logo {
@@ -29,9 +35,19 @@ FONT SIZE SYSTEM (px)
       height: fit-content;
       margin: 0 auto;
 
+      @include tablet {
+        margin: 0;
+      }
+
       &__main {
         width: 9rem;
-        height: 1.6625rem;
+
+        @include tablet {
+          width: 10.5rem;
+        }
+        @include desktop {
+          width: 11rem;
+        }
       }
     }
 
@@ -42,15 +58,23 @@ FONT SIZE SYSTEM (px)
       text-align: center;
 
       @include tablet {
+        font-size: 1.125rem;
         width: 25vw;
-        display: flex;
-        justify-content: space-around;
+        padding: 0;
+      }
+
+      @include desktop {
+        width: 20vw;
       }
 
       &__link {
         color: #08090a;
         font-weight: 600;
         width: 45vw;
+
+        @include tablet {
+          width: 10vw;
+        }
 
         &--hidden {
           display: none;

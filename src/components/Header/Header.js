@@ -22,9 +22,9 @@ function Header() {
               <Link to="/signup">
                 <p className="nav-links__link">Sign Up</p>
               </Link>
-              <Link to="/about">
+              {/* <Link to="/about">
                 <p className="nav-links__link nav-links__link--hidden">About</p>
-              </Link>
+              </Link> */}
             </div>
           </nav>
         </header>
