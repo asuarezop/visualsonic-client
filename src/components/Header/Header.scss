@@ -58,9 +58,10 @@ FONT SIZE SYSTEM (px)
       text-align: center;
 
       @include tablet {
-        font-size: 1.125rem;
+        font-size: 1.025rem;
         width: 25vw;
         padding: 0;
+        align-items: center;
       }
 
       @include desktop {
@@ -71,6 +72,23 @@ FONT SIZE SYSTEM (px)
         color: #08090a;
         font-weight: 600;
         width: 45vw;
+
+        &--cta {
+          border-top-left-radius: 0.25rem;
+          border-top-right-radius: 0.25rem;
+          border-bottom-left-radius: 0.25rem;
+          border-bottom-right-radius: 0.25rem;
+          background-color: $secondary-color-darkblue;
+          color: $secondary-color-greywhite;
+          text-transform: uppercase;
+          padding: 0.6rem;
+        }
+
+        &--cta:hover {
+          background-color: $primary-color-lightblue;
+          color: $primary-color-white;
+          cursor: pointer;
+        }
 
         @include tablet {
           width: 10vw;

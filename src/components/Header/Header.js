@@ -20,7 +20,9 @@ function Header() {
                 <p className="nav-links__link">Login</p>
               </Link>
               <Link to="/signup">
-                <p className="nav-links__link">Sign Up</p>
+                <button className="nav-links__link nav-links__link--cta">
+                  Sign Up
+                </button>
               </Link>
               {/* <Link to="/about">
                 <p className="nav-links__link nav-links__link--hidden">About</p>
