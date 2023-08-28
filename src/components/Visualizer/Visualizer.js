@@ -1,6 +1,7 @@
 import "./Visualizer.scss";
 import React from "react";
 import Sketch from "react-p5";
+import "p5/lib/addons/p5.sound";
 
 let x = 50;
 let y = 50;
