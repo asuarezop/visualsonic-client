@@ -16,7 +16,7 @@ function HomePage() {
     <>
       <Header />
       <Hero />
-      <Visualizer />
+      <Visualizer  />
     </>
   );
 }
