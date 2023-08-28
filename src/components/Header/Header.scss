@@ -3,29 +3,63 @@
 @use "../../styles/partials/global" as *;
 @use "../../styles/partials/typography" as *;
 
-.nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/*
+SPACING SYSTEM (px)
+2 / 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 80 / 96 / 128
 
-  .nav-logo {
-    width: fit-content;
-    height: fit-content;
+FONT SIZE SYSTEM (px)
+10 / 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 / 52 / 62 / 74 / 86 / 98
+*/
 
-    &__main {
-      width: 9rem;
-      height: 1.6625rem;
-    }
-  }
+.header {
+  padding: 1rem;
 
-  .nav-links {
-    width: 25vw;
+  .nav {
+    margin: 0 1rem;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
 
-    &__link {
-      color: #08090a;
-      font-weight: 600;
+    @include tablet {
+    }
+
+    .nav-logo {
+      width: fit-content;
+      height: fit-content;
+      margin: 0 auto;
+
+      &__main {
+        width: 9rem;
+        height: 1.6625rem;
+      }
+    }
+
+    .nav-links {
+      padding-top: 0.5rem;
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+
+      @include tablet {
+        width: 25vw;
+        display: flex;
+        justify-content: space-around;
+      }
+
+      &__link {
+        color: #08090a;
+        font-weight: 600;
+        width: 45vw;
+
+        &--hidden {
+          display: none;
+
+          @include tablet {
+            display: inline-block;
+          }
+        }
+      }
     }
   }
 }
