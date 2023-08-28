@@ -1,5 +1,6 @@
 import Header from "../../components/Header/Header";
 import Hero from "../../components/Hero/Hero";
+import Visualizer from "../../components/Visualizer/Visualizer";
 import "./HomePage.scss";
 
 function HomePage() {
@@ -15,6 +16,7 @@ function HomePage() {
     <>
       <Header />
       <Hero />
+      <Visualizer />
     </>
   );
 }
