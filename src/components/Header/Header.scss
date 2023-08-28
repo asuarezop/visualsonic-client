@@ -19,7 +19,6 @@ FONT SIZE SYSTEM (px)
   }
 
   .nav {
-    margin: 0 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -52,16 +51,16 @@ FONT SIZE SYSTEM (px)
     }
 
     .nav-links {
-      padding-top: 0.5rem;
+      padding-top: 1rem;
       display: flex;
       justify-content: space-around;
+      align-items: center;
       text-align: center;
 
       @include tablet {
         font-size: 1.025rem;
         width: 25vw;
         padding: 0;
-        align-items: center;
       }
 
       @include desktop {
@@ -74,7 +73,7 @@ FONT SIZE SYSTEM (px)
 
       &__link {
         font-weight: 600;
-        width: 45vw;
+        width: 42.5vw;
 
         &--cta {
           border-top-left-radius: 0.25rem;
@@ -84,7 +83,11 @@ FONT SIZE SYSTEM (px)
           background-color: $secondary-color-darkblue;
           color: $secondary-color-greywhite;
           text-transform: uppercase;
-          padding: 0.6rem;
+          padding: 0.5rem;
+
+          @include tablet {
+            padding: 0.6rem;
+          }
         }
 
         &--cta:hover {

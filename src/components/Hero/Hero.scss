@@ -14,18 +14,45 @@ FONT SIZE SYSTEM (px)
 .hero {
   display: flex;
   flex-direction: column;
-  width: 45vw;
   padding: 1.5rem;
+  background-image: linear-gradient(rgba(0, 5, 1, 0.18), rgba(0, 5, 1, 0.18)),
+    url("../../assets/images/suzi-kim-LpK55Nv-Na8-unsplash.jpg");
+  background-size: cover;
+  height: 100vh;
+
+  @include tablet {
+    justify-content: center;
+  }
 
   .hero-text {
+    margin: 1.5rem 0;
+    @include tablet {
+      width: 45vw;
+    }
+
     &__headline {
-      font-size: 1.125rem;
-      line-height: 1.45rem;
+      font-size: 1.25rem;
+      line-height: 1.6rem;
+      font-weight: 700;
+      color: $secondary-color-greywhite;
+
+      @include tablet {
+        font-size: 1.5rem;
+        line-height: 1.8rem;
+      }
     }
 
     &__mission {
-      margin: 1rem 0;
-      line-height: 1.65rem;
+      font-size: 1rem;
+      font-weight: 600;
+      color: $primary-color-white;
+      margin: 0.5rem 0;
+      line-height: 1.55rem;
+
+      @include tablet {
+        margin: 1rem 0;
+        line-height: 1.65rem;
+      }
     }
 
     &__trynow {
@@ -39,6 +66,12 @@ FONT SIZE SYSTEM (px)
       text-transform: uppercase;
       padding: 0.6rem;
       font-weight: 600;
+
+      &--cta:hover {
+        background-color: $primary-color-lightblue;
+        color: $primary-color-white;
+        cursor: pointer;
+      }
     }
   }
 }
