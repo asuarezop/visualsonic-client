@@ -4,6 +4,10 @@
 
 In today's modern age, technology has rapidly advanced to provide convenient and easy solutions for many creators. However, it can be challenging to know exactly what tools create the biggest impact for your brand and business. This application was designed in mind for musicians, artists, DJs, live-show events, and entertainment event spaces to elevate the listener's experience. Feel free to play around and tinker with the visualizer to get the best out of the appplication. Click anywhere on page to try it out!
 
+## Headline
+
+Elevate your music experience through our pre-built audio visualizers. Designed for the busy creator and audio enthusiast.
+
 ## Credits/Inspiration (Could be added if time permits)
 
 - Role:

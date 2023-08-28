@@ -68,8 +68,11 @@ FONT SIZE SYSTEM (px)
         width: 20vw;
       }
 
+      &__anchor {
+        color: $primary-color-black;
+      }
+
       &__link {
-        color: #08090a;
         font-weight: 600;
         width: 45vw;
 

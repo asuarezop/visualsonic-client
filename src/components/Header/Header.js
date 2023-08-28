@@ -16,7 +16,7 @@ function Header() {
               />
             </div>
             <div className="nav-links">
-              <Link to="/login">
+              <Link className="nav-links__anchor" to="/login">
                 <p className="nav-links__link">Login</p>
               </Link>
               <Link to="/signup">
