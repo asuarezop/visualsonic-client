@@ -65,6 +65,7 @@ FONT SIZE SYSTEM (px)
 
       @include desktop {
         width: 20vw;
+        font-size: 1.125rem;
       }
 
       &__anchor {
@@ -87,6 +88,11 @@ FONT SIZE SYSTEM (px)
 
           @include tablet {
             padding: 0.6rem;
+          }
+
+          @include desktop {
+            padding: 1rem;
+            font-size: 1rem;
           }
         }
 

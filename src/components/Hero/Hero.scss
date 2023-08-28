@@ -24,21 +24,31 @@ FONT SIZE SYSTEM (px)
     justify-content: center;
   }
 
+  @include desktop {
+    padding: 2rem;
+  }
+
   .hero-text {
     margin: 1.5rem 0;
+
     @include tablet {
       width: 45vw;
     }
 
     &__headline {
       font-size: 1.25rem;
-      line-height: 1.6rem;
+      line-height: 1.6;
       font-weight: 700;
       color: $secondary-color-greywhite;
 
       @include tablet {
         font-size: 1.5rem;
-        line-height: 1.8rem;
+        line-height: 1.8;
+      }
+
+      @include desktop {
+        font-size: 2rem;
+        line-height: 1.2;
       }
     }
 
@@ -47,11 +57,15 @@ FONT SIZE SYSTEM (px)
       font-weight: 600;
       color: $primary-color-white;
       margin: 0.5rem 0;
-      line-height: 1.55rem;
+      line-height: 1.55;
 
       @include tablet {
         margin: 1rem 0;
-        line-height: 1.65rem;
+        line-height: 1.65;
+      }
+
+      @include desktop {
+        font-size: 1.125rem;
       }
     }
 
@@ -66,6 +80,11 @@ FONT SIZE SYSTEM (px)
       text-transform: uppercase;
       padding: 0.6rem;
       font-weight: 600;
+
+      @include desktop {
+        padding: 1rem;
+        font-size: 16px;
+      }
 
       &--cta:hover {
         background-color: $primary-color-lightblue;
