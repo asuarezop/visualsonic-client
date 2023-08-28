@@ -1,0 +1,31 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/global" as *;
+@use "../../styles/partials/typography" as *;
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .nav-logo {
+    width: fit-content;
+    height: fit-content;
+
+    &__main {
+      width: 9rem;
+      height: 1.6625rem;
+    }
+  }
+
+  .nav-links {
+    width: 25vw;
+    display: flex;
+    justify-content: space-around;
+
+    &__link {
+      color: #08090a;
+      font-weight: 600;
+    }
+  }
+}
