@@ -1,50 +1,55 @@
-import React, { Component } from "react";
-import p5 from "p5"; // Importing actual p5 library
-// import "p5/lib/addons/p5.sound";
+import React from "react";
+import Sketch from "react-p5";
+import "p5/lib/addons/p5.sound";
+import songFile from "./assets/sounds/09 Underwater Echo.mp3";
 
-//To import new p5 sketch component in INSTANCE mode
-class P5Sketch extends Component {
-  constructor(props) {
-    super(props);
-    this.myRef = React.createRef();
-  }
+//REACT-P5 METHOD (WORKS WITH SOUND LIBRARY)
 
-  Sketch = (p) => {
-    let windowWidth = window.innerWidth;
-    let windowHeight = window.innerHeight;
-    let x = 100;
-    let y = 100;
-    let sound;
+//All variables used for below functions must be declared outside the component
+let x = 50;
+let y = 50;
+const windowWidth = window.innerWidth;
+const windowHeight = window.innerHeight;
+let song;
 
-    p.preload = function () {
-      sound = p.loadSound("09 Underwater Echo.mp3");
-    };
-
-    p.setup = function () {
-      const cnv = p.createCanvas(windowWidth, windowHeight);
-      cnv.mousePressed(() => {
-        sound.play();
-      });
-    };
-
-    p.draw = function () {
-      p.background(0);
-      p.fill(255);
-      p.rect(x, y, 50, 50);
-    };
+function P5Sketch(props) {
+  const preload = (p5) => {
+    song = p5.loadSound(songFile);
   };
 
-  componentDidMount() {
-    this.myP5 = new p5(this.Sketch, this.myRef.current);
-  }
+  const setup = (p5, canvasParentRef) => {
+    // use parent to render the canvas in this ref
+    // (without that p5 will render the canvas outside of your component)
+    p5.createCanvas(windowWidth, windowHeight).parent(canvasParentRef);
 
-  componentWillUnmount() {
-    this.myP5.remove();
-  }
+    p5.noLoop();
+  };
 
-  render() {
-    return <div ref={this.myRef}></div>;
-  }
+  const draw = (p5) => {
+    p5.background(0);
+    p5.ellipse(x, y, 70, 70);
+    // NOTE: Do not use setState in the draw function or in functions that are executed
+    // in the draw function...
+    // please use normal variables or class properties for these purposes
+    x++;
+  };
+
+  const mouseClicked = (p5) => {
+    if (!song.isPlaying() && song.isLoaded()) {
+      song.play();
+    } else if (song.isPlaying()) {
+      song.pause();
+    }
+  };
+
+  return (
+    <Sketch
+      preload={preload}
+      setup={setup}
+      draw={draw}
+      mouseClicked={mouseClicked}
+    />
+  );
 }
 
 export default P5Sketch;
