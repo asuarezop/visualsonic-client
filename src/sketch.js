@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import p5 from "p5"; // Importing actual p5 library
-// import "p5/lib/addons/p5.sound"; // Importing p5 sound library addon, not included by default when installing p5
 
 //To import new p5 sketch component in INSTANCE mode
 class P5Sketch extends Component {
