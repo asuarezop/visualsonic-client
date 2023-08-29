@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import p5 from "p5"; // Importing actual p5 library
+// import "p5/lib/addons/p5.sound";
 
 //To import new p5 sketch component in INSTANCE mode
 class P5Sketch extends Component {
@@ -15,12 +16,15 @@ class P5Sketch extends Component {
     let y = 100;
     let sound;
 
-    // p.preload = function () {
-    //   sound = p.loadSound();
-    // };
+    p.preload = function () {
+      sound = p.loadSound("09 Underwater Echo.mp3");
+    };
 
     p.setup = function () {
-      p.createCanvas(windowWidth, windowHeight);
+      const cnv = p.createCanvas(windowWidth, windowHeight);
+      cnv.mousePressed(() => {
+        sound.play();
+      });
     };
 
     p.draw = function () {
