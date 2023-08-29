@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import p5 from "p5"; // get p5 object to use sound library
+import p5 from "p5"; // Importing actual p5 library
+// import "p5/lib/addons/p5.sound"; // Importing p5 sound library addon, not included by default when installing p5
 
 //To import new p5 sketch component in INSTANCE mode
 class P5Sketch extends Component {
@@ -9,42 +10,33 @@ class P5Sketch extends Component {
   }
 
   Sketch = (p) => {
-    let windowWidth = window.screen.width;
-    let windowHeight = window.screen.height;
+    let windowWidth = window.innerWidth;
+    let windowHeight = window.innerHeight;
     let x = 100;
     let y = 100;
+    let sound;
 
-    p.preload = () => {
-      let song = p.loadSound();
-      let img = p.loadImage();
-    };
+    // p.preload = function () {
+    //   sound = p.loadSound();
+    // };
 
-    p.setup = () => {
+    p.setup = function () {
       p.createCanvas(windowWidth, windowHeight);
-      p.oscillator = new p5.Oscillator();
-      p.oscillator.start();
     };
 
-    p.draw = () => {
-      p.background(220);
-      // Your p5.js drawing code here
+    p.draw = function () {
       p.background(0);
       p.fill(255);
       p.rect(x, y, 50, 50);
     };
   };
 
-  //To mount new p5 objects onto screen
   componentDidMount() {
     this.myP5 = new p5(this.Sketch, this.myRef.current);
   }
 
-  //To cleanup any p5 objects to not be rendered on screen
   componentWillUnmount() {
     this.myP5.remove();
-    this.myP5.remove();
-    this.myP5.oscillator.stop();
-    this.myP5.oscillator.dispose();
   }
 
   render() {
