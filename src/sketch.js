@@ -7,8 +7,7 @@ import imgFile from "./assets/images/Home Screen Background.jpg";
 //REACT-P5 METHOD (WORKS WITH SOUND LIBRARY)
 
 //All variables used for below functions must be declared outside the component
-let x = 50;
-let y = 50;
+
 const canvasWidth = window.innerWidth;
 const canvasHeight = window.innerHeight;
 let song;
@@ -16,44 +15,66 @@ let img;
 let fft;
 
 function P5Sketch(props) {
-  const preload = (p5) => {
-    song = p5.loadSound(songFile);
-    img = p5.loadImage(imgFile);
+  const preload = (p) => {
+    p.soundFormats("mp3");
+    song = p.loadSound(songFile);
+    // img = p.loadImage(imgFile);
   };
 
-  const setup = (p5, canvasParentRef) => {
+  const setup = (p, canvasParentRef) => {
     // use parent to render the canvas in this ref
     // (without that p5 will render the canvas outside of your component)
-    p5.createCanvas(canvasWidth, canvasHeight).parent(canvasParentRef);
+    p.createCanvas(canvasWidth, canvasHeight).parent(canvasParentRef);
 
-    if (song.isLoaded()) {
-      fft = new p5.constructor.FFT();
-    }
+    p.angleMode(p.DEGREES);
 
-    p5.noLoop();
+    fft = new window.p5.FFT();
   };
 
-  const draw = (p5) => {
-    p5.background(0);
-    p5.stroke(255);
-    p5.ellipse(x, y, 70, 70);
-    // p5.noFill();
+  const draw = (p) => {
+    p.background(0);
+    p.stroke(255);
+    p.noFill();
+
+    p.translate(canvasWidth / 2, canvasHeight / 2);
+
     // NOTE: Do not use setState in the draw function or in functions that are executed
     // in the draw function...
     // please use normal variables or class properties for these purposes
-    x++;
+    // x++;
 
-    if (fft) {
-      let wave = fft.waveform();
+    fft.analyze();
 
-      for (let i = 0; i < canvasWidth; i++) {
-        let index = p5.floor(p5.map(i, 0, canvasWidth, 0, wave.length));
+    let wave = fft.waveform();
 
-        let x = i;
-        let y = wave[index] * 300 + canvasHeight / 2;
-        p5.point(x, y);
+    for (let t = -1; t <= 1; t += 2) {
+      p.beginShape();
+
+      for (let i = 0; i < 180; i += 0.5) {
+        //Specifiying to use the audio of the waveform as index, must be converted to an integer
+        let index = p.floor(p.map(i, 0, canvasWidth, 180, wave.length - 1));
+
+        //r (radius) mapped to wave index, with minimum and maximum radians of circle in last two arguments
+        let r = p.map(wave[index], -1, 1, 150, 350);
+
+        //x position be equal to radius(r) times sin(), times (t) variable to create both sides of visualizer
+        let x = r * p.sin(i) * t;
+        //y position be equal to radius(r) times cos(), polar coordinates Y
+        let y = r * p.cos(i);
+        //change the line shape of waveform
+        p.vertex(x, y);
       }
+      p.endShape();
     }
+    // for (let i = 0; i < canvasWidth; i++) {
+    //   let index = p.floor(p.map(i, 0, canvasWidth, 0, wave.length));
+
+    //   let x = i;
+    //   let y = wave[index] * 300 + canvasHeight / 2;
+    //   p.point(x, y);
+    // }
+    // p.endShape();
+
     // if (fft) {
     //   let waveform = fft.waveform();
 
@@ -68,8 +89,12 @@ function P5Sketch(props) {
     // }
   };
 
-  const mouseClicked = (p5) => {
-    if (!song.isPlaying() && song.isLoaded()) {
+  const mouseClicked = () => {
+    if (!song) {
+      return;
+    }
+
+    if (!song.isPlaying()) {
       song.play();
     } else {
       song.pause();
