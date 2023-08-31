@@ -158,12 +158,20 @@ function P5Sketch(props) {
   }
 
   return (
-    <Sketch
-      preload={preload}
-      setup={setup}
-      draw={draw}
-      mouseClicked={mouseClicked}
-    />
+    <>
+      <Sketch
+        preload={preload}
+        setup={setup}
+        draw={draw}
+        mouseClicked={mouseClicked}
+      />
+      {/* <input
+        className="upload-file"
+        type="file"
+        id="upload-file"
+        accept="audio/*"
+      /> */}
+    </>
   );
 }
 
