@@ -10,3 +10,119 @@ SPACING SYSTEM (px)
 FONT SIZE SYSTEM (px)
 10 / 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 / 52 / 62 / 74 / 86 / 98
 */
+
+.footer {
+  padding: 1.5rem;
+
+  .learn-more {
+    display: flex;
+    flex-direction: column;
+
+    @include desktop {
+      // display: grid;
+      // grid-template-columns: repeat(3, 1fr);
+      // column-gap: 30px;
+    }
+
+    &__title {
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+    }
+
+    .more-info {
+      @include tablet {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .more-info-credit {
+        @include tablet {
+          width: 35vw;
+        }
+
+        &__sub-title {
+          margin-bottom: 0.5rem;
+          line-height: 1.6;
+
+          @include tablet {
+            margin-bottom: 1rem;
+          }
+
+          @include desktop {
+            font-size: 1.125rem;
+          }
+        }
+
+        &__sub-text {
+          margin-bottom: 1rem;
+
+          @include desktop {
+            width: 32vw;
+          }
+        }
+      }
+
+      .more-info-contact {
+        @include tablet {
+          width: 25vw;
+        }
+
+        &__title {
+          margin-bottom: 0.5rem;
+
+          @include tablet {
+            margin-bottom: 1rem;
+          }
+
+          @include desktop {
+            font-size: 1.125rem;
+          }
+        }
+
+        &__text {
+          margin-bottom: 1rem;
+        }
+      }
+
+      .more-info-socials {
+        @include tablet {
+          width: 25vw;
+        }
+
+        &__title {
+          margin-bottom: 0.5rem;
+
+          @include tablet {
+            margin-bottom: 1rem;
+            padding-left: 0.7rem;
+          }
+
+          @include desktop {
+            font-size: 1.125rem;
+          }
+        }
+
+        .socials-box {
+          display: flex;
+          justify-content: space-between;
+          width: 42vw;
+
+          @include tablet {
+            width: 20vw;
+            justify-content: space-evenly;
+          }
+
+          @include desktop {
+            width: 15vw;
+            justify-content: space-around;
+          }
+
+          &__icons {
+            width: 1.75rem;
+            height: 1.75rem;
+          }
+        }
+      }
+    }
+  }
+}
