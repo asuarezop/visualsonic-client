@@ -13,12 +13,14 @@ const canvasHeight = window.innerHeight;
 let song;
 let img;
 let fft;
+let amp;
+let particles = [];
 
 function P5Sketch(props) {
   const preload = (p) => {
     p.soundFormats("mp3");
     song = p.loadSound(songFile);
-    // img = p.loadImage(imgFile);
+    img = p.loadImage(imgFile);
   };
 
   const setup = (p, canvasParentRef) => {
@@ -28,13 +30,21 @@ function P5Sketch(props) {
 
     p.angleMode(p.DEGREES);
 
-    fft = new window.p5.FFT();
+    p.imageMode(p.CENTER);
+
+    p.rectMode(p.CENTER);
+
+    fft = new window.p5.FFT(0.3);
+
+    img.filter(p.BLUR, 5);
   };
 
   const draw = (p) => {
     p.background(0);
     p.stroke(255);
     p.noFill();
+
+    let wave = fft.waveform();
 
     p.translate(canvasWidth / 2, canvasHeight / 2);
 
@@ -45,7 +55,24 @@ function P5Sketch(props) {
 
     fft.analyze();
 
-    let wave = fft.waveform();
+    amp = fft.getEnergy(20, 200);
+
+    p.push();
+    if (amp > 240) {
+      p.rotate(p.random(-0.5, 0.5));
+    }
+
+    p.image(img, 0, 0, canvasWidth + 100, canvasHeight + 100);
+    p.pop();
+
+    let alpha = p.map(amp, 0, 255, 180, 150);
+    p.fill(0, alpha);
+    p.noStroke();
+    p.rect(0, 0, canvasWidth, canvasHeight);
+
+    p.stroke(255);
+    p.strokeWeight(3);
+    p.noFill();
 
     for (let t = -1; t <= 1; t += 2) {
       p.beginShape();
@@ -66,27 +93,18 @@ function P5Sketch(props) {
       }
       p.endShape();
     }
-    // for (let i = 0; i < canvasWidth; i++) {
-    //   let index = p.floor(p.map(i, 0, canvasWidth, 0, wave.length));
 
-    //   let x = i;
-    //   let y = wave[index] * 300 + canvasHeight / 2;
-    //   p.point(x, y);
-    // }
-    // p.endShape();
+    let particle = new Particle(p);
+    particles.push(particle);
 
-    // if (fft) {
-    //   let waveform = fft.waveform();
-
-    //   p5.beginShape();
-    //   for (let i = 0; i < waveform.length; i++) {
-    //     let x = p5.map(i, 0, waveform.length, 0, canvasWidth);
-    //     let y = p5.map(waveform[i], 0, 1, 0, canvasHeight);
-
-    //     p5.vertex(x, y);
-    //   }
-    //   p5.endShape();
-    // }
+    for (let i = particles.length - 1; i >= 0; i--) {
+      if (!particles[i].edges()) {
+        particles[i].update(amp > 240, p);
+        particles[i].show(p);
+      } else {
+        particles.splice(i, 1);
+      }
+    }
   };
 
   const mouseClicked = () => {
@@ -100,6 +118,44 @@ function P5Sketch(props) {
       song.pause();
     }
   };
+
+  class Particle {
+    constructor(p) {
+      this.pos = p.constructor.Vector.random2D().mult(250);
+      this.vel = p.createVector();
+      this.acc = this.pos.copy().mult(p.random(0.0001, 0.00001));
+
+      this.w = p.random(3, 5);
+      this.color = [p.random(200, 255), p.random(200, 255), p.random(200, 255)];
+    }
+    update(condition) {
+      this.vel.add(this.acc);
+      this.pos.add(this.vel);
+
+      if (condition) {
+        this.pos.add(this.vel);
+        this.pos.add(this.vel);
+        this.pos.add(this.vel);
+      }
+    }
+    edges() {
+      if (
+        this.pos.x < -canvasWidth / 2 ||
+        this.pos.x > canvasWidth / 2 ||
+        this.pos.y < -canvasHeight / 2 ||
+        this.pos.y > canvasHeight / 2
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    show(p) {
+      p.noStroke();
+      p.fill(this.color);
+      p.ellipse(this.pos.x, this.pos.y, this.w);
+    }
+  }
 
   return (
     <Sketch
