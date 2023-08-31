@@ -8,7 +8,9 @@ function Steps() {
   return (
     <>
       <section className="steps">
-        <h2 className="steps__title">Getting Started</h2>
+        <h2 className="steps__title">
+          How to start using interactive audio visualizer
+        </h2>
         <div className="steps-col">
           <div className="step">
             <img className="step__img" src={waveIcon} alt="waveform icon" />
@@ -29,8 +31,7 @@ function Steps() {
               alt="background img icon"
             />
             <p className="step__text">
-              3. Pick a background image to display alongside your track (must
-              be in JPEG format)
+              3. Pick a custom image to display alongside your track
             </p>
           </div>
           <div className="step">
@@ -39,7 +40,7 @@ function Steps() {
               src={mouseClick}
               alt="mouse click icon"
             />
-            <p className="step__text">
+            <p className="step__text step__text--margin">
               4. Click anywhere on the screen to sync track with visualizer
             </p>
           </div>
