@@ -10,3 +10,33 @@ SPACING SYSTEM (px)
 FONT SIZE SYSTEM (px)
 10 / 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 / 52 / 62 / 74 / 86 / 98
 */
+
+.steps {
+  padding: 1.5rem;
+
+  &__title {
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+  }
+
+  .steps-col {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 5rem;
+
+    .step {
+      font-weight: 600;
+
+      &__img {
+        width: 1.75rem;
+        height: 1.75rem;
+        margin-bottom: 0.5rem;
+      }
+
+      &__text {
+        font-size: 1.125rem;
+        line-height: 1.5;
+      }
+    }
+  }
+}
