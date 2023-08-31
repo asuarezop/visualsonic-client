@@ -12,19 +12,27 @@ FONT SIZE SYSTEM (px)
 */
 
 .sign-up {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   padding: 1.5rem;
+  line-height: 1.4;
+
+  @include tablet {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
   &__title {
     font-size: 1.65rem;
     margin-bottom: 1rem;
   }
 
+  &__sub-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
   .sign-up-card {
     padding: 0;
-
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem;
     border-bottom-left-radius: 0.25rem;
@@ -37,13 +45,13 @@ FONT SIZE SYSTEM (px)
 
       .form-input {
         width: 100%;
-        margin-bottom: 0.5rem;
+        margin-bottom: 1rem;
         color: $primary-color-black;
 
         &__title {
           display: flex;
           flex-direction: column;
-          font-size: 14px;
+          font-size: 0.875rem;
           text-transform: uppercase;
         }
 
@@ -67,25 +75,41 @@ FONT SIZE SYSTEM (px)
           padding: 0.4rem;
         }
 
+        &__confirm-password {
+          margin-top: 0.1563rem;
+          padding: 0.4rem;
+        }
+
         &__color {
           margin-top: 0.1563rem;
         }
       }
 
       .form-button {
-        border-top-left-radius: 0.25rem;
-        border-top-right-radius: 0.25rem;
-        border-bottom-left-radius: 0.25rem;
-        border-bottom-right-radius: 0.25rem;
-
         &__submit {
+          border-top-left-radius: 0.25rem;
+          border-top-right-radius: 0.25rem;
+          border-bottom-left-radius: 0.25rem;
+          border-bottom-right-radius: 0.25rem;
           background-color: $secondary-color-darkblue;
           color: $secondary-color-greywhite;
           text-transform: uppercase;
           padding: 0.6rem;
           margin-top: 1rem;
+          margin-bottom: 2rem;
+          font-weight: 600;
+
+          &--cta:hover {
+            background-color: $primary-color-lightblue;
+            color: $primary-color-white;
+            cursor: pointer;
+          }
         }
       }
     }
+  }
+
+  .sign-up-preview {
+    background-color: rgba(0, 0, 0, 0.2);
   }
 }

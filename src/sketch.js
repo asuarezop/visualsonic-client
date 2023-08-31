@@ -19,14 +19,23 @@ let particles = [];
 function P5Sketch(props) {
   const preload = (p) => {
     p.soundFormats("mp3");
-    song = p.loadSound(songFile);
-    img = p.loadImage(imgFile);
   };
+
+  function songLoaded(song) {
+    songFile = song;
+  }
+
+  function imgLoaded(img) {
+    imgFile = img;
+  }
 
   const setup = (p, canvasParentRef) => {
     // use parent to render the canvas in this ref
     // (without that p5 will render the canvas outside of your component)
     p.createCanvas(canvasWidth, canvasHeight).parent(canvasParentRef);
+
+    song = p.loadSound(songFile, songLoaded);
+    img = p.loadImage(imgFile, imgLoaded);
 
     p.angleMode(p.DEGREES);
 

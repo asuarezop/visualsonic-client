@@ -1,4 +1,5 @@
 import "./SignUpPage.scss";
+import visualizerGif from "../../assets/images/ncs.gif";
 
 function SignUpPage() {
   function handleSubmit(e) {
@@ -7,9 +8,11 @@ function SignUpPage() {
   return (
     <>
       <section className="sign-up">
-        <h1 className="sign-up__title">
-          Register to save your own visualizer profile
-        </h1>
+        <h1 className="sign-up__title">Create Your Account</h1>
+        <p className="sign-up__sub-title">
+          Welcome, Register your details below to save your own visualizer
+          profile!
+        </p>
 
         <div className="sign-up-card">
           <form className="form" onSubmit={handleSubmit}>
@@ -55,9 +58,20 @@ function SignUpPage() {
                 <input
                   className="form-input__password"
                   id="password"
-                  type="text"
+                  type="password"
                   name="password"
                   placeholder="Password must have at least 8 characters"
+                ></input>
+              </label>
+            </div>
+            <div className="form-input">
+              <label className="form-input__title">
+                Confirm Password:
+                <input
+                  className="form-input__confirm-password"
+                  id="confirmPassword"
+                  type="password"
+                  name="confirmPassword"
                 ></input>
               </label>
             </div>
@@ -69,17 +83,30 @@ function SignUpPage() {
                   id="visualizerColor"
                   type="color"
                   name="visualizerColor"
-                  value="#007ea7"
                   placeholder="Choose your visualizer color"
                 ></input>
               </label>
             </div>
             <div className="form-button">
-              <button className="form-button__submit" type="submit">
+              <button
+                className="form-button__submit form-button__submit--cta"
+                type="submit"
+              >
                 Submit Form
               </button>
             </div>
           </form>
+        </div>
+        <div className="sign-up-preview">
+          <h2 className="sign-up-preview__title">Welcome to VisualSonic</h2>
+          <p className="sign-up-preview__sub-heading">
+            Elevate your music experience through our pre-built audio visualizer
+          </p>
+          <img
+            className="sign-up-preview__gif"
+            src={visualizerGif}
+            alt="audio visualizer gif"
+          />
         </div>
       </section>
     </>
