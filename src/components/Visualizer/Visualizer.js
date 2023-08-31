@@ -1,7 +1,11 @@
 import "./Visualizer.scss";
 
 function Visualizer() {
-  return <></>;
+  return (
+    <>
+  
+    </>
+  );
 }
 
 export default Visualizer;

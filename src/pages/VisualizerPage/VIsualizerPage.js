@@ -5,6 +5,12 @@ function VisualizerPage() {
   return (
     <>
       <P5Sketch />
+      <input
+        className="upload-mp3"
+        type="file"
+        id="fileupload"
+        accept="audio/*"
+      />
     </>
   );
 }
