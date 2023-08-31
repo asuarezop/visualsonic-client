@@ -1,10 +1,10 @@
-import Visualizer from "../../components/Visualizer/Visualizer";
+import P5Sketch from "../../sketch";
 import "./VisualizerPage.scss";
 
 function VisualizerPage() {
   return (
     <>
-      <Visualizer />
+      <P5Sketch />
     </>
   );
 }

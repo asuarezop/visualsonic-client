@@ -36,7 +36,7 @@ FONT SIZE SYSTEM (px)
     }
 
     &__headline {
-      font-size: 1.25rem;
+      font-size: 1.75rem;
       line-height: 1.6;
       font-weight: 700;
       color: $secondary-color-greywhite;
@@ -48,7 +48,7 @@ FONT SIZE SYSTEM (px)
 
       @include desktop {
         font-size: 2rem;
-        line-height: 1.2;
+        line-height: 1.3;
       }
     }
 

@@ -1,8 +1,7 @@
-import P5Sketch from "../../sketch";
 import "./Visualizer.scss";
 
 function Visualizer() {
-  return <>{<P5Sketch />}</>;
+  return <></>;
 }
 
 export default Visualizer;
