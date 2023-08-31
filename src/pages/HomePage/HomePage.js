@@ -10,6 +10,7 @@ function HomePage() {
       <Header />
       <Hero />
       <Steps />
+      <hr className="section-divider"></hr>
       <Footer />
     </>
   );
