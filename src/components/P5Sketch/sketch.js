@@ -1,8 +1,11 @@
 import React from "react";
 import Sketch from "react-p5";
+import { useState } from "react";
 import "p5/lib/addons/p5.sound";
-import songFile from "./assets/sounds/09 Underwater Echo.mp3";
-import imgFile from "./assets/images/Home Screen Background.jpg";
+import "./sketch.scss";
+import songFile from "../../assets/sounds/09 Underwater Echo.mp3";
+import imgFile from "../../assets/images/Home Screen Background.jpg";
+import uploadIcon from "../../assets/icons/upload-solid.svg";
 
 //REACT-P5 METHOD (WORKS WITH SOUND LIBRARY)
 
@@ -17,6 +20,26 @@ let amp;
 let particles = [];
 
 function P5Sketch(props) {
+  const [audioFile, setAudioFile] = useState("");
+  const [imageFile, setImageFile] = useState("");
+  const [selectedColor, setSelectedColor] = useState("");
+
+  //Handling uploaded files
+  function handleAudioFile(e) {
+    const uploadedAudioFile = e.target.files[0].name;
+    setAudioFile(uploadedAudioFile);
+  }
+
+  function handleImageFile(e) {
+    const uploadedImageFile = e.target.files[0].name;
+    setImageFile(uploadedImageFile);
+  }
+
+  function handleColor(e) {
+    const visualizerColor = e.target.value;
+    setSelectedColor(visualizerColor);
+  }
+
   const preload = (p) => {
     p.soundFormats("mp3");
   };
@@ -50,7 +73,10 @@ function P5Sketch(props) {
 
   const draw = (p) => {
     p.background(0);
-    p.stroke(255);
+
+    //Make changes to waveform stroke line here:
+    p.stroke(selectedColor);
+
     p.noFill();
 
     let wave = fft.waveform();
@@ -116,17 +142,50 @@ function P5Sketch(props) {
     }
   };
 
-  const mouseClicked = () => {
+  //Visualizer controls
+  const play = () => {
     if (!song) {
       return;
     }
 
     if (!song.isPlaying()) {
       song.play();
-    } else {
-      song.pause();
     }
   };
+
+  const pause = () => {
+    if (!song) {
+      return;
+    }
+    song.pause();
+  };
+
+  const restart = () => {
+    if (!song) {
+      return;
+    }
+    if (song.isPaused()) {
+      song.playMode("restart");
+      song.play();
+    } else {
+      song.playMode("restart");
+      song.play();
+    }
+  };
+
+  // const mouseClicked = (e) => {
+  //   e.stopPropagation();
+
+  //   if (!song) {
+  //     return;
+  //   }
+
+  //   if (!song.isPlaying()) {
+  //     song.play();
+  //   } else {
+  //     song.pause();
+  //   }
+  // };
 
   class Particle {
     constructor(p) {
@@ -168,18 +227,85 @@ function P5Sketch(props) {
 
   return (
     <>
-      <Sketch
-        preload={preload}
-        setup={setup}
-        draw={draw}
-        mouseClicked={mouseClicked}
-      />
-      {/* <input
-        className="upload-file"
-        type="file"
-        id="upload-file"
-        accept="audio/*"
-      /> */}
+      <div className="canvas-box">
+        <Sketch
+          preload={preload}
+          setup={setup}
+          draw={draw}
+          // mouseClicked={mouseClicked}
+        />
+        <div className="visualizer-controls">
+          <button className="visualizer-controls__play" onClick={play}>
+            Play
+          </button>
+          <button className="visualizer-controls__pause" onClick={pause}>
+            Pause
+          </button>
+          <button className="visualizer-controls__restart" onClick={restart}>
+            Restart
+          </button>
+        </div>
+      </div>
+      <div className="upload-files">
+        <span className="upload-files__title">
+          Select a song, image, and color to generate your visualizer
+        </span>
+        <input
+          onChange={handleAudioFile}
+          className="upload-files__input"
+          id="soundFile"
+          type="file"
+          name="soundFile"
+          accept="audio/*"
+        ></input>
+        <label htmlFor="soundFile" className="upload-files__audio">
+          <img
+            className="upload-files__icon"
+            src={uploadIcon}
+            alt="upload icon"
+          />
+          &nbsp;Select audio file
+        </label>
+        <span>
+          <strong>Chosen file: </strong>
+          <span onChange={handleAudioFile} id="file-name">
+            {audioFile}
+          </span>
+        </span>
+        <input
+          onChange={handleImageFile}
+          className="upload-files__input"
+          id="imageFile"
+          type="file"
+          name="imageFile"
+          accept="image/*"
+        ></input>
+        <label htmlFor="imageFile" className="upload-files__image">
+          <img
+            className="upload-files__icon"
+            src={uploadIcon}
+            alt="upload icon"
+          />
+          &nbsp;Select image file
+        </label>
+        <span>
+          <strong>Chosen file: </strong>
+          <span onChange={handleImageFile} id="file-name">
+            {imageFile}
+          </span>
+        </span>
+        <label htmlFor="visualizerColor" className="form-input__title">
+          Visualizer Color:
+          <input
+            className="form-input__color"
+            id="visualizerColor"
+            type="color"
+            name="visualizerColor"
+            placeholder="Choose your visualizer color"
+            onChange={handleColor}
+          ></input>
+        </label>
+      </div>
     </>
   );
 }
