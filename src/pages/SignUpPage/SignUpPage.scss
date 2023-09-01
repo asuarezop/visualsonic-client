@@ -12,39 +12,51 @@ FONT SIZE SYSTEM (px)
 */
 
 .sign-up {
-  padding: 1.5rem;
   line-height: 1.4;
 
   @include tablet {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 2rem;
   }
 
-  &__title {
-    font-size: 1.65rem;
-    margin-bottom: 1rem;
-  }
-
-  &__sub-title {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+  @include desktop {
+    padding: 4rem;
+    justify-content: space-between;
   }
 
   .sign-up-card {
-    padding: 0;
+    padding: 1.5rem;
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem;
     border-bottom-left-radius: 0.25rem;
     border-bottom-right-radius: 0.25rem;
 
-    .form {
-      display: flex;
-      flex-direction: column;
-      flex-wrap: wrap;
+    @include tablet {
+      width: 45vw;
+    }
 
+    @include desktop {
+      width: 34vw;
+    }
+
+    &__title {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    &__sub-title {
+      font-size: 1.175rem;
+      margin-bottom: 1rem;
+
+      @include tablet {
+        font-size: 1.275rem;
+      }
+    }
+
+    .form {
       .form-input {
-        width: 100%;
         margin-bottom: 1rem;
         color: $primary-color-black;
 
@@ -95,9 +107,13 @@ FONT SIZE SYSTEM (px)
           color: $secondary-color-greywhite;
           text-transform: uppercase;
           padding: 0.6rem;
-          margin-top: 1rem;
-          margin-bottom: 2rem;
           font-weight: 600;
+          margin-top: 0.5rem;
+
+          @include tablet {
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+          }
 
           &--cta:hover {
             background-color: $primary-color-lightblue;
@@ -110,6 +126,45 @@ FONT SIZE SYSTEM (px)
   }
 
   .sign-up-preview {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgb(8, 9, 10, 0.9);
+    color: $primary-color-white;
+    padding: 1.5rem;
+
+    @include tablet {
+      width: 38vw;
+    }
+
+    @include desktop {
+      width: 50vw;
+    }
+
+    &__title {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    &__sub-heading {
+      font-size: 1.175rem;
+      margin-bottom: 1rem;
+
+      @include tablet {
+        font-size: 1.275rem;
+      }
+
+      @include tablet {
+        margin-bottom: 4rem;
+      }
+    }
+    &__gif {
+      width: 65vw;
+
+      @include tablet {
+        margin-top: 2rem;
+        width: 25vw;
+      }
+      @include desktop {
+        margin: 0;
+        width: 35vw;
+      }
+    }
   }
 }

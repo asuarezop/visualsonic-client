@@ -8,13 +8,12 @@ function SignUpPage() {
   return (
     <>
       <section className="sign-up">
-        <h1 className="sign-up__title">Create Your Account</h1>
-        <p className="sign-up__sub-title">
-          Welcome, Register your details below to save your own visualizer
-          profile!
-        </p>
-
         <div className="sign-up-card">
+          <h1 className="sign-up-card__title">Create Your Account</h1>
+          <p className="sign-up-card__sub-title">
+            Welcome, register your details below to save your own visualizer
+            profile!
+          </p>
           <form className="form" onSubmit={handleSubmit}>
             <div className="form-input">
               <label className="form-input__title">
@@ -72,6 +71,7 @@ function SignUpPage() {
                   id="confirmPassword"
                   type="password"
                   name="confirmPassword"
+                  placeholder="Retype password"
                 ></input>
               </label>
             </div>

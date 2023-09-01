@@ -67,7 +67,7 @@ function P5Sketch(props) {
     amp = fft.getEnergy(20, 200);
 
     p.push();
-    if (amp > 240) {
+    if (amp > 238) {
       p.rotate(p.random(-0.5, 0.5));
     }
 
@@ -108,7 +108,7 @@ function P5Sketch(props) {
 
     for (let i = particles.length - 1; i >= 0; i--) {
       if (!particles[i].edges()) {
-        particles[i].update(amp > 240, p);
+        particles[i].update(amp > 238, p);
         particles[i].show(p);
       } else {
         particles.splice(i, 1);
