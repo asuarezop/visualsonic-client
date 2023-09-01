@@ -1,5 +1,6 @@
 import "./SignUpPage.scss";
 import visualizerGif from "../../assets/images/ncs.gif";
+import uploadIcon from "../../assets/icons/upload-solid.svg";
 
 function SignUpPage() {
   function handleSubmit(e) {
@@ -85,6 +86,41 @@ function SignUpPage() {
                   name="visualizerColor"
                   placeholder="Choose your visualizer color"
                 ></input>
+              </label>
+            </div>
+            <div className="upload-files">
+              <span className="upload-files__title">
+                Select a song and image to generate your visualizer
+              </span>
+              <input
+                className="upload-files__input"
+                id="soundFile"
+                type="file"
+                name="soundFile"
+                accept="audio/*"
+              ></input>
+              <label htmlFor="soundFile" className="upload-files__audio">
+                <img
+                  className="upload-files__icon"
+                  src={uploadIcon}
+                  alt="upload icon"
+                />
+                &nbsp;Select audio file
+              </label>
+              <input
+                className="upload-files__input"
+                id="imageFile"
+                type="file"
+                name="imageFile"
+                accept="image/*"
+              ></input>
+              <label htmlFor="imageFile" className="upload-files__image">
+                <img
+                  className="upload-files__icon"
+                  src={uploadIcon}
+                  alt="upload icon"
+                />
+                &nbsp;Select image file
               </label>
             </div>
             <div className="form-button">

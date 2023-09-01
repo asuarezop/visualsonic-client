@@ -123,6 +123,61 @@ FONT SIZE SYSTEM (px)
         }
       }
     }
+
+    .upload-files {
+      display: flex;
+      flex-direction: column;
+
+      &__title {
+        width: 25vw;
+        margin-bottom: 0.5rem;
+      }
+
+      &__audio {
+        margin-bottom: 0.1563rem;
+      }
+
+      &__image {
+        margin-bottom: 0.1563rem;
+      }
+
+      &__icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 0.5rem;
+      }
+
+      input#soundFile,
+      input#imageFile {
+        display: none;
+      }
+
+      input#soundFile + label,
+      input#imageFile + label {
+        display: flex;
+        align-items: center;
+        background-color: $secondary-color-alabaster;
+        color: $secondary-color-gunmetal;
+        border-top-left-radius: 0.25rem;
+        border-top-right-radius: 0.25rem;
+        border-bottom-left-radius: 0.25rem;
+        border-bottom-right-radius: 0.25rem;
+        margin-bottom: 0.5rem;
+        width: 40%;
+        padding: 0.4rem;
+      }
+
+      input#soundFile + label:hover,
+      input#imageFile + label:hover {
+        border: 1px solid $primary-color-lightblue;
+        cursor: pointer;
+      }
+
+      &__input {
+        margin-bottom: 0.5rem;
+        // background-color: $primary-color-lightblue;
+      }
+    }
   }
 
   .sign-up-preview {
