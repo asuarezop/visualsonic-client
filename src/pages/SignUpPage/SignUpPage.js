@@ -1,11 +1,27 @@
 import "./SignUpPage.scss";
 import visualizerGif from "../../assets/images/ncs.gif";
 import uploadIcon from "../../assets/icons/upload-solid.svg";
+import { useState } from "react";
 
 function SignUpPage() {
+  const [audioFile, setAudioFile] = useState("");
+  const [imageFile, setImageFile] = useState("");
+
   function handleSubmit(e) {
     e.preventDefault();
   }
+
+  //Handling uploaded files
+  function handleAudioFile(e) {
+    const uploadedAudioFile = e.target.files[0].name;
+    setAudioFile(uploadedAudioFile);
+  }
+
+  function handleImageFile(e) {
+    const uploadedImageFile = e.target.files[0].name;
+    setImageFile(uploadedImageFile);
+  }
+
   return (
     <>
       <section className="sign-up">
@@ -93,6 +109,7 @@ function SignUpPage() {
                 Select a song and image to generate your visualizer
               </span>
               <input
+                onChange={handleAudioFile}
                 className="upload-files__input"
                 id="soundFile"
                 type="file"
@@ -107,7 +124,14 @@ function SignUpPage() {
                 />
                 &nbsp;Select audio file
               </label>
+              <span>
+                <strong>Chosen file: </strong>
+                <span onChange={handleAudioFile} id="file-name">
+                  {audioFile}
+                </span>
+              </span>
               <input
+                onChange={handleImageFile}
                 className="upload-files__input"
                 id="imageFile"
                 type="file"
@@ -122,6 +146,12 @@ function SignUpPage() {
                 />
                 &nbsp;Select image file
               </label>
+              <span>
+                <strong>Chosen file: </strong>
+                <span onChange={handleImageFile} id="file-name">
+                  {imageFile}
+                </span>
+              </span>
             </div>
             <div className="form-button">
               <button
