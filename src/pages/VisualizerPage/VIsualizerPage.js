@@ -1,4 +1,4 @@
-import P5Sketch from "../../sketch";
+import P5Sketch from "../../components/P5Sketch/sketch";
 import "./VisualizerPage.scss";
 
 function VisualizerPage() {

@@ -11,6 +11,51 @@ FONT SIZE SYSTEM (px)
 10 / 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 / 52 / 62 / 74 / 86 / 98
 */
 
+.visualizer {
+  width: 100%;
+  background-color: $primary-color-lavender;
+
+  .visualizer-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__play {
+      border-top-left-radius: 0.25px;
+      border-top-right-radius: 0.25px;
+      border-bottom-left-radius: 0.25px;
+      border-bottom-right-radius: 0.25px;
+      border: 1px solid $secondary-color-darkblue;
+      background-color: $secondary-color-gunmetal;
+      color: $primary-color-white;
+      padding: 0.6rem;
+    }
+
+    &__pause {
+      border-top-left-radius: 0.25px;
+      border-top-right-radius: 0.25px;
+      border-bottom-left-radius: 0.25px;
+      border-bottom-right-radius: 0.25px;
+      border: 1px solid $secondary-color-darkblue;
+      background-color: $secondary-color-gunmetal;
+      color: $primary-color-white;
+      padding: 0.6rem;
+      margin: 0 1rem;
+    }
+
+    &__restart {
+      border-top-left-radius: 0.25px;
+      border-top-right-radius: 0.25px;
+      border-bottom-left-radius: 0.25px;
+      border-bottom-right-radius: 0.25px;
+      border: 1px solid $secondary-color-darkblue;
+      background-color: $secondary-color-gunmetal;
+      color: $primary-color-white;
+      padding: 0.6rem;
+    }
+  }
+}
+
 .form-input {
   margin-bottom: 1rem;
   color: $primary-color-black;
@@ -30,24 +75,10 @@ FONT SIZE SYSTEM (px)
 .upload-files {
   display: flex;
   flex-direction: column;
+  padding: 1.5rem;
 
   &__title {
     width: 25vw;
-    margin-bottom: 0.5rem;
-  }
-
-  &__audio {
-    margin-bottom: 0.1563rem;
-  }
-
-  &__image {
-    margin-bottom: 0.1563rem;
-  }
-
-  &__icon {
-    width: 24px;
-    height: 24px;
-    margin-right: 0.5rem;
   }
 
   input#soundFile,
@@ -65,8 +96,8 @@ FONT SIZE SYSTEM (px)
     border-top-right-radius: 0.25rem;
     border-bottom-left-radius: 0.25rem;
     border-bottom-right-radius: 0.25rem;
-    margin-bottom: 0.5rem;
-    width: 40%;
+    margin-top: 1rem;
+    width: 14.5%;
     padding: 0.4rem;
   }
 
@@ -76,7 +107,51 @@ FONT SIZE SYSTEM (px)
     cursor: pointer;
   }
 
-  &__input {
-    margin-bottom: 0.5rem;
+  .selected-audio {
+    &__input {
+      margin-right: 0.5rem;
+    }
+
+    &__placeholder {
+      font-size: 15px;
+    }
+
+    &__icon {
+      width: 24px;
+      height: 24px;
+      margin-right: 0.5rem;
+    }
+
+    .selected-file {
+      font-size: 14px;
+
+      &__text {
+        padding-top: 1rem;
+      }
+    }
+  }
+
+  .selected-image {
+    &__input {
+      margin-right: 0.5rem;
+    }
+
+    &__placeholder {
+      font-size: 15px;
+    }
+
+    &__icon {
+      width: 24px;
+      height: 24px;
+      margin-right: 0.5rem;
+    }
+
+    .selected-file {
+      font-size: 14px;
+
+      &__text {
+        padding-top: 1rem;
+      }
+    }
   }
 }
