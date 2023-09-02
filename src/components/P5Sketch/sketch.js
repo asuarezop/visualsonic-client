@@ -6,7 +6,8 @@ import "./sketch.scss";
 import songFile from "../../assets/sounds/09 Underwater Echo.mp3";
 import imgFile from "../../assets/images/Home Screen Background.jpg";
 import uploadIcon from "../../assets/icons/upload-solid.svg";
-import menuIcon from "../../assets/icons/menu-outline.svg";
+// import menuIcon from "../../assets/icons/menu-outline.svg";
+import gearIcon from "../../assets/icons/gear-solid.svg";
 
 //REACT-P5 METHOD (WORKS WITH SOUND LIBRARY)
 
@@ -23,6 +24,7 @@ function P5Sketch(props) {
   const [audioFile, setAudioFile] = useState("");
   const [imageFile, setImageFile] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
+  const [dropDown, setDropDown] = useState(false);
 
   //Handling uploaded files
   function handleAudioFile(e) {
@@ -230,88 +232,105 @@ function P5Sketch(props) {
       <main className="visualizer">
         <div className="visualizer-panel">
           <div className="visualizer-controls">
-            <button className="visualizer-controls__play" onClick={play}>
-              Play
-            </button>
-            <button className="visualizer-controls__pause" onClick={pause}>
-              Pause
-            </button>
-            <button className="visualizer-controls__restart" onClick={restart}>
-              Restart
-            </button>
-          </div>
-          <div className="upload-files">
-            <span className="upload-files__title">
-              Select a song, image, and color to generate your visualizer
-            </span>
-            <div className="selected-audio">
-              <input
-                onChange={handleAudioFile}
-                className="selected-audio__input"
-                id="soundFile"
-                type="file"
-                name="soundFile"
-                accept="audio/*"
-              ></input>
-              <label
-                htmlFor="soundFile"
-                className="selected-audio__placeholder"
-              >
-                <img
-                  className="selected-audio__icon"
-                  src={uploadIcon}
-                  alt="upload icon"
-                />
-                &nbsp;Select audio file
-              </label>
-              <span className="selected-file">
-                <strong className="selected-file__text">Chosen file: </strong>
-                <span onChange={handleAudioFile} id="file-name">
-                  {audioFile}
-                </span>
-              </span>
+            <div
+              onClick={(e) => setDropDown(true)}
+              className="visualizer-settings"
+            >
+              <img
+                className="visualizer-settings__icon"
+                src={gearIcon}
+                alt="Gear cog icon"
+              />
             </div>
-            <div className="selected-image">
-              <input
-                onChange={handleImageFile}
-                className="selected-image__input"
-                id="imageFile"
-                type="file"
-                name="imageFile"
-                accept="image/*"
-              ></input>
-              <label
-                htmlFor="imageFile"
-                className="selected-image__placeholder"
+            <div className="visualizer-playback">
+              <button className="visualizer-playback__play" onClick={play}>
+                Play
+              </button>
+              <button className="visualizer-playback__pause" onClick={pause}>
+                Pause
+              </button>
+              <button
+                className="visualizer-playback__restart"
+                onClick={restart}
               >
-                <img
-                  className="selected-image__icon"
-                  src={uploadIcon}
-                  alt="upload icon"
-                />
-                &nbsp;Select image file
-              </label>
-              <span className="selected-file">
-                <strong className="selected-file__text">Chosen file: </strong>
-                <span onChange={handleImageFile} id="file-name">
-                  {imageFile}
-                </span>
-              </span>
+                Restart
+              </button>
             </div>
           </div>
-          <div className="visualizer-color">
-            <label htmlFor="visualizerColor" className="form-input__title">
-              Visualizer Color:
-              <input
-                className="form-input__color"
-                id="visualizerColor"
-                type="color"
-                name="visualizerColor"
-                placeholder="Choose your visualizer color"
-                onChange={handleColor}
-              ></input>
-            </label>
-          </div>
+          {dropDown && (
+            <div className="upload-files">
+              <span className="upload-files__title">
+                Select a song, image, and color to generate your visualizer
+              </span>
+              <div className="selected-audio">
+                <input
+                  onChange={handleAudioFile}
+                  className="selected-audio__input"
+                  id="soundFile"
+                  type="file"
+                  name="soundFile"
+                  accept="audio/*"
+                ></input>
+                <label
+                  htmlFor="soundFile"
+                  className="selected-audio__placeholder"
+                >
+                  <img
+                    className="selected-audio__icon"
+                    src={uploadIcon}
+                    alt="upload icon"
+                  />
+                  &nbsp;Select audio file
+                </label>
+                <span className="selected-file">
+                  <strong className="selected-file__text">Chosen file: </strong>
+                  <span onChange={handleAudioFile} id="file-name">
+                    {audioFile}
+                  </span>
+                </span>
+              </div>
+              <div className="selected-image">
+                <input
+                  onChange={handleImageFile}
+                  className="selected-image__input"
+                  id="imageFile"
+                  type="file"
+                  name="imageFile"
+                  accept="image/*"
+                ></input>
+                <label
+                  htmlFor="imageFile"
+                  className="selected-image__placeholder"
+                >
+                  <img
+                    className="selected-image__icon"
+                    src={uploadIcon}
+                    alt="upload icon"
+                  />
+                  &nbsp;Select image file
+                </label>
+                <span className="selected-file">
+                  <strong className="selected-file__text">Chosen file: </strong>
+                  <span onChange={handleImageFile} id="file-name">
+                    {imageFile}
+                  </span>
+                </span>
+              </div>
+              <div className="visualizer-color">
+                <label htmlFor="visualizerColor" className="form-input__title">
+                  Visualizer Color:
+                  <input
+                    className="form-input__color"
+                    id="visualizerColor"
+                    type="color"
+                    name="visualizerColor"
+                    placeholder="Choose your visualizer color"
+                    onChange={handleColor}
+                  ></input>
+                </label>
+              </div>
+            </div>
+          )}
         </div>
         <Sketch
           preload={preload}

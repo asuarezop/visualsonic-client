@@ -15,43 +15,83 @@ FONT SIZE SYSTEM (px)
   width: 100%;
   background-color: $primary-color-lavender;
 
+  .visualizer-panel {
+    background-image: linear-gradient(#fff, #dfd9e2, #25292d);
+    position: relative;
+    height: 20vh;
+  }
+
   .visualizer-controls {
     display: flex;
     justify-content: center;
     align-items: center;
 
-    &__play {
-      border-top-left-radius: 0.25px;
-      border-top-right-radius: 0.25px;
-      border-bottom-left-radius: 0.25px;
-      border-bottom-right-radius: 0.25px;
-      border: 1px solid $secondary-color-darkblue;
-      background-color: $secondary-color-gunmetal;
-      color: $primary-color-white;
-      padding: 0.6rem;
+    .visualizer-settings {
+      padding: 0;
+
+      &__icon {
+        width: 2rem;
+        height: 2rem;
+        position: absolute;
+        top: 0.125rem;
+        left: 0.3125rem;
+      }
     }
 
-    &__pause {
-      border-top-left-radius: 0.25px;
-      border-top-right-radius: 0.25px;
-      border-bottom-left-radius: 0.25px;
-      border-bottom-right-radius: 0.25px;
-      border: 1px solid $secondary-color-darkblue;
-      background-color: $secondary-color-gunmetal;
-      color: $primary-color-white;
-      padding: 0.6rem;
-      margin: 0 1rem;
-    }
+    .visualizer-playback {
+      padding: 0;
 
-    &__restart {
-      border-top-left-radius: 0.25px;
-      border-top-right-radius: 0.25px;
-      border-bottom-left-radius: 0.25px;
-      border-bottom-right-radius: 0.25px;
-      border: 1px solid $secondary-color-darkblue;
-      background-color: $secondary-color-gunmetal;
-      color: $primary-color-white;
-      padding: 0.6rem;
+      &__play {
+        box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.05);
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border: 1px solid $secondary-color-alabaster;
+        background-color: $secondary-color-gunmetal;
+        color: $primary-color-white;
+        padding: 0.6rem;
+
+        &:hover {
+          cursor: pointer;
+          background-color: $secondar-color-lightblack;
+        }
+      }
+
+      &__pause {
+        box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.05);
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border: 1px solid $secondary-color-alabaster;
+        background-color: $secondary-color-gunmetal;
+        color: $primary-color-white;
+        padding: 0.6rem;
+        margin: 0 1rem;
+
+        &:hover {
+          cursor: pointer;
+          background-color: $secondar-color-lightblack;
+        }
+      }
+
+      &__restart {
+        box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.05);
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border: 1px solid $secondary-color-alabaster;
+        background-color: $secondary-color-gunmetal;
+        color: $primary-color-white;
+        padding: 0.6rem;
+
+        &:hover {
+          cursor: pointer;
+          background-color: $secondar-color-lightblack;
+        }
+      }
     }
   }
 }
@@ -117,8 +157,8 @@ FONT SIZE SYSTEM (px)
     }
 
     &__icon {
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
       margin-right: 0.5rem;
     }
 
@@ -141,8 +181,8 @@ FONT SIZE SYSTEM (px)
     }
 
     &__icon {
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
       margin-right: 0.5rem;
     }
 
