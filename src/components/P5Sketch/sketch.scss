@@ -120,6 +120,12 @@ FONT SIZE SYSTEM (px)
       }
     }
   }
+
+  .loading {
+    color: $primary-color-black;
+    font-size: 14px;
+    font-weight: 600;
+  }
 }
 
 .form-input {

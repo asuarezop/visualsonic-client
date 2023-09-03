@@ -3,11 +3,11 @@ import Sketch from "react-p5";
 import { useState } from "react";
 import "p5/lib/addons/p5.sound";
 import "./sketch.scss";
+import uploadIcon from "../../assets/icons/upload-solid.svg";
+import gearIcon from "../../assets/icons/gear-solid.svg";
 import songFile from "../../assets/sounds/09 Underwater Echo.mp3";
 import imgFile from "../../assets/images/Home Screen Background.jpg";
-import uploadIcon from "../../assets/icons/upload-solid.svg";
 // import menuIcon from "../../assets/icons/menu-outline.svg";
-import gearIcon from "../../assets/icons/gear-solid.svg";
 
 //REACT-P5 METHOD (WORKS WITH SOUND LIBRARY)
 
@@ -21,17 +21,25 @@ let amp;
 let particles = [];
 
 function P5Sketch(props) {
-  const [audioFile, setAudioFile] = useState("");
-  const [imageFile, setImageFile] = useState("");
+  let [audioFile, setAudioFile] = useState("");
+  let [imageFile, setImageFile] = useState("");
+  let [isImageLoaded, setIsImageLoaded] = useState(false);
   const [selectedColor, setSelectedColor] = useState("");
   const [dropDown, setDropDown] = useState(false);
+  const [userSettings, setUserSettings] = useState({
+    newAudio: songFile,
+    newImage: imgFile,
+    newColor: "#000",
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
-  //Handling uploaded files
+  //Setting user song selection
   function handleAudioFile(e) {
     const uploadedAudioFile = e.target.files[0].name;
     setAudioFile(uploadedAudioFile);
   }
 
+  //Setting user image selection
   function handleImageFile(e) {
     const uploadedImageFile = e.target.files[0].name;
     setImageFile(uploadedImageFile);
@@ -42,25 +50,67 @@ function P5Sketch(props) {
     setSelectedColor(visualizerColor);
   }
 
+  function handleApplyOptions(p) {
+    const updatedSettings = {
+      ...userSettings,
+      newAudio: audioFile,
+      newImage: imageFile,
+      newColor: selectedColor,
+    };
+
+    console.log(updatedSettings);
+
+    setUserSettings(updatedSettings);
+  }
+
+  //VISUALIZER PRELOAD
   const preload = (p) => {
-    p.soundFormats("mp3");
+    p.soundFormats("mp3", "wav");
   };
 
-  function songLoaded(song) {
-    songFile = song;
-  }
-
-  function imgLoaded(img) {
-    imgFile = img;
-  }
-
+  //VISUALIZER SETUP
   const setup = (p, canvasParentRef) => {
     // use parent to render the canvas in this ref
     // (without that p5 will render the canvas outside of your component)
     p.createCanvas(canvasWidth, canvasHeight).parent(canvasParentRef);
+    p.getAudioContext().suspend();
 
-    song = p.loadSound(songFile, songLoaded);
-    img = p.loadImage(imgFile, imgLoaded);
+    const { newAudio, newImage } = userSettings;
+
+    if (newAudio && newImage) {
+      setIsLoading(true);
+
+      if (newImage) {
+        img = p.loadImage(newImage, (loadedImage) => {
+          img = loadedImage;
+          console.log("Image loaded successfully", img);
+          img.filter(p.BLUR, 5);
+          setIsImageLoaded(true);
+          setIsLoading(false);
+        });
+      } else {
+        console.log("Error loading image");
+      }
+
+      if (newAudio) {
+        song = p.loadSound(newAudio, (loadedSound) => {
+          song = loadedSound;
+          console.log("Song was loaded successfully", song);
+          setIsLoading(false);
+        });
+      } else {
+        console.log("Error loading audio");
+      }
+    }
+
+    if (!song) {
+      return;
+    }
+
+    console.log(p.floor(p.millis()) + "milliseconds");
+
+    // song = p.loadSound(audioFile, applyOptions);
+    // img = p.loadImage(imageFile, applyOptions);
 
     p.angleMode(p.DEGREES);
 
@@ -69,27 +119,24 @@ function P5Sketch(props) {
     p.rectMode(p.CENTER);
 
     fft = new window.p5.FFT(0.3);
-
-    img.filter(p.BLUR, 5);
   };
 
+  //VISUALIZER RENDER
   const draw = (p) => {
+    //WORKS WITH NEW OBJECT CREATED
+    // p.background(userSettings.backgroundColor)
     p.background(0);
 
     //Make changes to waveform stroke line here:
-    p.stroke(selectedColor);
-
+    p.stroke(userSettings.newColor);
     p.noFill();
-
-    let wave = fft.waveform();
-
     p.translate(canvasWidth / 2, canvasHeight / 2);
 
     // NOTE: Do not use setState in the draw function or in functions that are executed
     // in the draw function...
     // please use normal variables or class properties for these purposes
     // x++;
-
+    let wave = fft.waveform();
     fft.analyze();
 
     amp = fft.getEnergy(20, 200);
@@ -175,19 +222,9 @@ function P5Sketch(props) {
     }
   };
 
-  // const mouseClicked = (e) => {
-  //   e.stopPropagation();
-
-  //   if (!song) {
-  //     return;
-  //   }
-
-  //   if (!song.isPlaying()) {
-  //     song.play();
-  //   } else {
-  //     song.pause();
-  //   }
-  // };
+  // function windowResized(p) {
+  //   p.resizeCanvas(canvasWidth, canvasHeight);
+  // }
 
   class Particle {
     constructor(p) {
@@ -242,6 +279,7 @@ function P5Sketch(props) {
                 alt="Gear cog icon"
               />
             </div>
+
             <div className="visualizer-playback">
               <button className="visualizer-playback__play" onClick={play}>
                 Play
@@ -256,8 +294,14 @@ function P5Sketch(props) {
                 Restart
               </button>
             </div>
+
             <div className="visualizer-apply">
-              <button className="visualizer-apply__btn">Apply</button>
+              <button
+                onClick={handleApplyOptions}
+                className="visualizer-apply__btn"
+              >
+                Apply
+              </button>
             </div>
           </div>
           {dropDown && (
@@ -287,9 +331,7 @@ function P5Sketch(props) {
                 </label>
                 <span className="selected-file">
                   <strong className="selected-file__text">Chosen file: </strong>
-                  <span onChange={handleAudioFile} id="file-name">
-                    {audioFile}
-                  </span>
+                  <span id="file-name">{audioFile}</span>
                 </span>
               </div>
               <div className="selected-image">
@@ -335,12 +377,16 @@ function P5Sketch(props) {
             </div>
           )}
         </div>
-        <Sketch
-          preload={preload}
-          setup={setup}
-          draw={draw}
-          // mouseClicked={mouseClicked}
-        />
+        {isLoading ? (
+          <div className="loading">Loading...</div>
+        ) : (
+          <Sketch
+            preload={preload}
+            setup={setup}
+            draw={draw}
+            // windowResized={windowResized}
+          />
+        )}
       </main>
     </>
   );
