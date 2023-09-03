@@ -233,7 +233,7 @@ function P5Sketch(props) {
         <div className="visualizer-panel">
           <div className="visualizer-controls">
             <div
-              onClick={(e) => setDropDown(true)}
+              onClick={(e) => setDropDown(!dropDown)}
               className="visualizer-settings"
             >
               <img
