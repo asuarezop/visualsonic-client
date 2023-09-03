@@ -256,6 +256,9 @@ function P5Sketch(props) {
                 Restart
               </button>
             </div>
+            <div className="visualizer-apply">
+              <button className="visualizer-apply__btn">Apply</button>
+            </div>
           </div>
           {dropDown && (
             <div className="upload-files">
