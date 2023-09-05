@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import Sketch from "react-p5";
-import { useState } from "react";
+import { useP5 } from "react-p5";
+import { useState, useRef } from "react";
 import "p5/lib/addons/p5.sound";
 import "./sketch.scss";
+import p5 from "p5";
 import uploadIcon from "../../assets/icons/upload-solid.svg";
 import gearIcon from "../../assets/icons/gear-solid.svg";
-import p5 from "p5";
 // import songFile from "../../assets/sounds/09 Underwater Echo.mp3";
 // import imgFile from "../../assets/images/Home Screen Background.jpg";
 // import menuIcon from "../../assets/icons/menu-outline.svg";
@@ -15,51 +16,80 @@ import p5 from "p5";
 // //All variables used for below functions must be declared outside the component
 const canvasWidth = window.innerWidth;
 const canvasHeight = window.innerHeight;
-let song;
-let img;
 let fft;
 let amp;
 let particles = [];
 
 function P5Sketch(props) {
+  //To store user input for audio, image, and color
   const [userAudio, setUserAudio] = useState("");
   const [userImage, setUserImage] = useState("");
-  const [isAudioLoaded, setIsAudioLoaded] = useState(false);
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
-  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedColor, setSelectedColor] = useState("#000");
+  // const [userSettings, setUserSettings] = useState({
+  //   newAudio: "",
+  //   newImage: "",
+  //   newColor: "",
+  // });
+
+  //To toggle drop down menu
   const [dropDown, setDropDown] = useState(false);
-  const [userSettings, setUserSettings] = useState({
-    newAudio: "",
-    newImage: "",
-    newColor: "#000",
-  });
+
+  //Loading indicators for audio and image files
   const [isLoading, setIsLoading] = useState(false);
+  const [songLoaded, setSongLoaded] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  //To store newly loaded audio and image
+  const [song, setSong] = useState(null);
+  const [img, setImg] = useState(null);
+
+  useEffect(() => {
+    //Load the audio and image only when userSettings change
+    if (userAudio && userImage) {
+      setIsLoading(true);
+    }
+  }, [userAudio, userImage]);
 
   //Preload function
   const preload = (p) => {
     p.soundFormats("mp3", "wav");
-    document.addEventListener("click", () => {
-      p.getAudioContext()
-        .resume()
-        .then(() => {
-          // console.log("Audio context resumed successfully");
-        })
-        .catch((error) => {
-          // console.log("Failed to resume audio context:", error);
-        });
-    });
   };
+
   const setup = (p) => {
     p.createCanvas(canvasWidth, canvasHeight).parent("sketch-container");
     p.getAudioContext().suspend();
 
     if (userAudio) {
-      loadAudioWrapper(p, userAudio);
+      // // Loading the new audio file
+      const loadedSong = p.loadSound(userAudio, () => {
+        setSong(loadedSong);
+
+        document.addEventListener("click", () => {
+          p.getAudioContext()
+            .resume()
+            .then(() => {
+              console.log("Audio context resumed successfully");
+            })
+            .catch((error) => {
+              console.log("Failed to resume audio context:", error);
+            });
+        });
+      });
+
+      if (song !== null && songLoaded) {
+        p.getAudioContext().resume();
+        loadedSong.play();
+        setIsLoading(false);
+        setSongLoaded(true);
+      }
     }
 
-    if (userImage) {
-      loadImageWrapper(p, userImage);
-    }
+    // // Loading the new image file
+    // const loadedImage = p.loadImage(userImage, () => {
+    //   setImg(loadedImage);
+    //   setIsLoading(false);
+    //   setImageLoaded(true);
+    // });
 
     //Checking load time of sketch setup
     console.log(p.floor(p.millis()) + "milliseconds");
@@ -72,7 +102,59 @@ function P5Sketch(props) {
   };
   const draw = (p) => {
     //WORKS WITH NEW OBJECT CREATED
-    p.background(userSettings.newColor);
+    p.background(selectedColor);
+    //   //Make changes to waveform stroke line here:
+    p.stroke(255);
+    p.noFill();
+    p.translate(canvasWidth / 2, canvasHeight / 2);
+    //   // NOTE: Do not use setState in the draw function or in functions that are executed
+    //   // in the draw function...
+    //   // please use normal variables or class properties for these purposes
+    //   // x++;
+
+    //   // let wave = fft.waveform();
+    //   // fft.analyze();
+    //   // amp = fft.getEnergy(20, 200);
+    //   // p.push();
+    //   // if (amp > 240) {
+    //   //   p.rotate(p.random(-0.5, 0.5));
+    //   // }
+    // p.image(img, 0, 0, canvasWidth + 100, canvasHeight + 100);
+    //   // p.pop();
+    //   // let alpha = p.map(amp, 0, 255, 180, 150);
+    //   // p.fill(0, alpha);
+    //   // p.noStroke();
+    //   // p.rect(0, 0, canvasWidth, canvasHeight);
+    //   // p.stroke(255);
+    //   // p.strokeWeight(3);
+    //   // p.noFill();
+
+    //   // for (let t = -1; t <= 1; t += 2) {
+    //   //   p.beginShape();
+    //   //   for (let i = 0; i < 180; i += 0.5) {
+    //   //     //Specifiying to use the audio of the waveform as index, must be converted to an integer
+    //   //     let index = p.floor(p.map(i, 0, canvasWidth, 180, wave.length - 1));
+    //   //     //r (radius) mapped to wave index, with minimum and maximum radians of circle in last two arguments
+    //   //     let r = p.map(wave[index], -1, 1, 150, 350);
+    //   //     //x position be equal to radius(r) times sin(), times (t) variable to create both sides of visualizer
+    //   //     let x = r * p.sin(i) * t;
+    //   //     //y position be equal to radius(r) times cos(), polar coordinates Y
+    //   //     let y = r * p.cos(i);
+    //   //     //change the line shape of waveform
+    //   //     p.vertex(x, y);
+    //   //   }
+    //   //   p.endShape();
+    //   // }
+    //   // let particle = new Particle(p);
+    //   // particles.push(particle);
+    //   // for (let i = particles.length - 1; i >= 0; i--) {
+    //   //   if (!particles[i].edges()) {
+    //   //     particles[i].update(amp > 240, p);
+    //   //     particles[i].show(p);
+    //   //   } else {
+    //   //     particles.splice(i, 1);
+    //   //   }
+    //   // }
   };
 
   // ----------------------- FUNCTIONS -----------------------------------
@@ -88,121 +170,39 @@ function P5Sketch(props) {
   function handleImageFile(e) {
     const uploadedImageFile = e.target.files[0];
     setUserImage(uploadedImageFile.name);
-    console.log("New image file loaded:", uploadedImageFile);
+    // console.log("New image file loaded:", uploadedImageFile);
   }
 
   //Setting user visualizer color selection
   function handleColor(e) {
     const visualizerColor = e.target.value;
     setSelectedColor(visualizerColor);
-    console.log("New visualizer color loaded:", e.target.value);
+    // console.log("New visualizer color loaded:", e.target.value);
   }
+
+  // const loadAudioAndImage = () => {
+  //   // //Loading the new audio file
+  //   // const loadedSong = p5.loadSound(userAudio, () => {
+  //   //   setSong(loadedSong);
+  //   //   setIsLoading(false);
+  //   //   setSongLoaded(true);
+  //   // });
+  //   // //Loading the new image file
+  //   // const loadedImage = p5.loadImage(userImage, () => {
+  //   //   setImg(loadedImage);
+  //   //   setImageLoaded(true);
+  //   // });
+  // };
 
   //Applying user's selection to be used in sketch
-  function handleApplyOptions(p) {
-    const updatedSettings = {
-      ...userSettings,
-      newAudio: userAudio,
-      newImage: userImage,
-      newColor: selectedColor,
-    };
-
-    //Apply new settings to sketch after 5 seconds
+  const handleApplyOptions = () => {
     setTimeout(() => {
-      setUserSettings(updatedSettings);
-      loadingMedia(updatedSettings);
+      setSong(userAudio);
     }, 5000);
-
-    console.log(userSettings.newAudio);
-  }
-
-  //WRAPPER FUNCTION TO LOAD IN USER AUDIO
-  function loadAudioWrapper(p, audioFilePath) {
-    if (audioFilePath) {
-      p.loadSound(audioFilePath, (loadedSong) => {
-        song = loadedSong;
-        setIsAudioLoaded(true);
-        console.log("Song loaded successfully", song);
-        fft = new window.p5.FFT(0.3);
-        //Starting the sketch loop, to keep user song selection persisting between re-renders
-        song.loop();
-      });
-    }
-  }
-
-  //WRAPPER FUNCTION TO LOAD IN USER IMAGE
-  function loadImageWrapper(p, imageFilePath) {
-    if (imageFilePath) {
-      p.loadImage(imageFilePath, (loadedImage) => {
-        img = loadedImage;
-        setIsImageLoaded(true);
-        console.log("Image loaded successfully", img);
-      });
-    }
-  }
-
-  const loadingMedia = (settings) => {
-    const { newAudio, newImage } = userSettings;
-    loadAudioWrapper(newAudio);
-    loadImageWrapper(newImage);
+    // setSong(userAudio); //causes error "failed to execute" decodeAudioData on BaseAudioContext
+    setSelectedColor(selectedColor);
+    setIsLoading(false);
   };
-
-  // //VISUALIZER RENDER
-  // const draw = (p) => {
-  //   //WORKS WITH NEW OBJECT CREATED
-  //   p.background(userSettings.newColor);
-
-  //   //Make changes to waveform stroke line here:
-  //   // p.stroke(255);
-  //   // p.noFill();
-  //   // p.translate(canvasWidth / 2, canvasHeight / 2);
-  //   // NOTE: Do not use setState in the draw function or in functions that are executed
-  //   // in the draw function...
-  //   // please use normal variables or class properties for these purposes
-  //   // x++;
-  //   // let wave = fft.waveform();
-  //   // fft.analyze();
-  //   // amp = fft.getEnergy(20, 200);
-  //   // p.push();
-  //   // if (amp > 240) {
-  //   //   p.rotate(p.random(-0.5, 0.5));
-  //   // }
-  //   // p.image(img, 0, 0, canvasWidth + 100, canvasHeight + 100);
-  //   // p.pop();
-  //   // let alpha = p.map(amp, 0, 255, 180, 150);
-  //   // p.fill(0, alpha);
-  //   // p.noStroke();
-  //   // p.rect(0, 0, canvasWidth, canvasHeight);
-  //   // p.stroke(255);
-  //   // p.strokeWeight(3);
-  //   // p.noFill();
-  //   // for (let t = -1; t <= 1; t += 2) {
-  //   //   p.beginShape();
-  //   //   for (let i = 0; i < 180; i += 0.5) {
-  //   //     //Specifiying to use the audio of the waveform as index, must be converted to an integer
-  //   //     let index = p.floor(p.map(i, 0, canvasWidth, 180, wave.length - 1));
-  //   //     //r (radius) mapped to wave index, with minimum and maximum radians of circle in last two arguments
-  //   //     let r = p.map(wave[index], -1, 1, 150, 350);
-  //   //     //x position be equal to radius(r) times sin(), times (t) variable to create both sides of visualizer
-  //   //     let x = r * p.sin(i) * t;
-  //   //     //y position be equal to radius(r) times cos(), polar coordinates Y
-  //   //     let y = r * p.cos(i);
-  //   //     //change the line shape of waveform
-  //   //     p.vertex(x, y);
-  //   //   }
-  //   //   p.endShape();
-  //   // }
-  //   // let particle = new Particle(p);
-  //   // particles.push(particle);
-  //   // for (let i = particles.length - 1; i >= 0; i--) {
-  //   //   if (!particles[i].edges()) {
-  //   //     particles[i].update(amp > 240, p);
-  //   //     particles[i].show(p);
-  //   //   } else {
-  //   //     particles.splice(i, 1);
-  //   //   }
-  //   // }
-  // };
 
   //Visualizer controls
   const play = () => {
@@ -307,7 +307,7 @@ function P5Sketch(props) {
             </div>
             <div className="visualizer-apply">
               <button
-                onClick={(p) => handleApplyOptions(p)}
+                onClick={handleApplyOptions}
                 className="visualizer-apply__btn"
               >
                 Apply
@@ -366,9 +366,7 @@ function P5Sketch(props) {
                 </label>
                 <span className="selected-file">
                   <strong className="selected-file__text">Chosen file: </strong>
-                  <span onChange={handleImageFile} id="file-name">
-                    {userImage}
-                  </span>
+                  <span id="file-name">{userImage}</span>
                 </span>
               </div>
               <div className="visualizer-color">
