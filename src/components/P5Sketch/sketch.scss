@@ -236,4 +236,46 @@ FONT SIZE SYSTEM (px)
       }
     }
   }
+
+  .selected-song {
+    font-family: "Poppins";
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: $primary-color-white;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1rem;
+
+    &__title {
+      color: $primary-color-white;
+      margin-bottom: 0.5rem;
+      width: 12vw;
+    }
+
+    &__options {
+      width: 13vw;
+      font-family: "Poppins";
+      // display: flex;
+      // align-items: flex-start;
+      // margin-bottom: 0.5rem;
+      padding: 0.2rem;
+      border-top-left-radius: 0.25rem;
+      border-top-right-radius: 0.25rem;
+      border-bottom-left-radius: 0.25rem;
+      border-bottom-right-radius: 0.25rem;
+    }
+
+    &__input {
+      font-family: "Poppins";
+      width: 13vw;
+      background-color: $secondary-color-alabaster;
+      color: $secondary-color-gunmetal;
+      padding: 0.2rem;
+      border-top-left-radius: 0.25rem;
+      border-top-right-radius: 0.25rem;
+      border-bottom-left-radius: 0.25rem;
+      border-bottom-right-radius: 0.25rem;
+      // margin-bottom: 1rem;
+    }
+  }
 }
