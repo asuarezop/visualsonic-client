@@ -237,7 +237,7 @@ FONT SIZE SYSTEM (px)
     }
   }
 
-  .selected-song {
+  .selected-style {
     font-family: "Poppins";
     margin-top: 1rem;
     font-size: 0.875rem;
@@ -255,9 +255,6 @@ FONT SIZE SYSTEM (px)
     &__options {
       width: 13vw;
       font-family: "Poppins";
-      // display: flex;
-      // align-items: flex-start;
-      // margin-bottom: 0.5rem;
       padding: 0.2rem;
       border-top-left-radius: 0.25rem;
       border-top-right-radius: 0.25rem;
@@ -275,7 +272,6 @@ FONT SIZE SYSTEM (px)
       border-top-right-radius: 0.25rem;
       border-bottom-left-radius: 0.25rem;
       border-bottom-right-radius: 0.25rem;
-      // margin-bottom: 1rem;
     }
   }
 }

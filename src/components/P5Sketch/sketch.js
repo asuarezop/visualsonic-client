@@ -3,6 +3,7 @@ import Sketch from "react-p5";
 import { useState } from "react";
 import "p5/lib/addons/p5.sound";
 import "./sketch.scss";
+import UserSketch from "../UserSketch/UserSketch";
 import songFile from "../../assets/sounds/81BPM_Massive_(Original Mix).mp3";
 import imgFile from "../../assets/images/Home Screen Background.jpg";
 import uploadIcon from "../../assets/icons/upload-solid.svg";
@@ -17,6 +18,8 @@ let song;
 let img;
 let fft;
 let amp;
+// let audioLoaded = false;
+// let imageLoaded = false;
 let particles = [];
 
 function P5Sketch(props) {
@@ -24,16 +27,22 @@ function P5Sketch(props) {
   const [audioFile, setAudioFile] = useState("");
   const [imageFile, setImageFile] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
+  const [selectedStyle, setSelectedStyle] = useState("");
 
   //To update new user selections
   const [userSettings, setUserSettings] = useState({
     newAudio: songFile,
     newImage: imgFile,
     newColor: "#000",
+    newStyle: "Circle",
   });
 
-  //To toggle drop down menu
+  // const [audioURL, setAudioURL] = useState(null);
+  // const [imageURL, setImageURL] = useState(null);
+
+  //To toggle drop down menu and user sketch
   const [dropDown, setDropDown] = useState(false);
+  const [removeCanvas, setRemoveCanvas] = useState(false);
 
   //To set state of file names
   const [audioName, setAudioName] = useState("");
@@ -46,6 +55,7 @@ function P5Sketch(props) {
 
     setAudioName(uploadedAudioFile.name);
     setAudioFile(uploadedAudioFile);
+
     console.log("New audio file loaded:", uploadedAudioFile);
   }
 
@@ -66,18 +76,27 @@ function P5Sketch(props) {
     console.log("New visualizer color loaded:", e.target.value);
   }
 
+  //Setting user visualizer style selection
+  function handleStyleChange(e) {
+    const visualizerStyle = e.target.value;
+    setSelectedStyle(visualizerStyle);
+    console.log("New visualizer style loaded:", visualizerStyle);
+  }
+
   const preload = (p) => {
     p.soundFormats("mp3");
   };
 
   function songLoaded(song) {
     songFile = song;
-    // console.log("Your song has succesfully loaded");
+
+    console.log("Your song has succesfully loaded");
   }
 
   function imgLoaded(img) {
     imgFile = img;
-    // console.log("Your image has succesfully loaded");
+
+    console.log("Your image has succesfully loaded");
   }
 
   const setup = (p, canvasParentRef) => {
@@ -100,7 +119,11 @@ function P5Sketch(props) {
   };
 
   const draw = (p) => {
-    p.background(selectedColor);
+    if (removeCanvas) {
+      p.remove();
+    }
+
+    p.background(0);
 
     //Make changes to waveform stroke line here:
     p.stroke(selectedColor);
@@ -207,8 +230,11 @@ function P5Sketch(props) {
       newAudio: audioFile,
       newImage: imageFile,
       newColor: selectedColor,
+      newStyle: selectedStyle,
     };
     setUserSettings(uploadedSettings);
+
+    setRemoveCanvas(true);
   };
 
   class Particle {
@@ -355,33 +381,39 @@ function P5Sketch(props) {
                   ></input>
                 </label>
               </div>
-              <div className="selected-song">
-                <label htmlFor="trackListings" className="selected-song__title">
-                  Choose from these track listings:
+              <div className="selected-style">
+                <label
+                  htmlFor="visualizerListings"
+                  className="selected-style__title"
+                >
+                  Choose your visualizer style:
                 </label>
-                <select className="selected-song__options" id="trackListings">
-                  <option value="echo">
-                    Underwater Echo - Approaching Nirvana
-                  </option>
-                  <option value="looped">Looped - Kiasmos</option>
-                  <option value="massive">Massive - Drake</option>
+                <select
+                  className="selected-style__options"
+                  id="visualizerListings"
+                  onChange={handleStyleChange}
+                  value={selectedStyle}
+                >
+                  <option value="bar">Bar visualizer</option>
+                  <option value="simple">Simple line visualizer</option>
                 </select>
-                <input
-                  className="selected-song__input"
+                {/* <button
+                  className="selected-style__input"
                   id="submitButton"
                   type="submit"
-                  // onChange={handleSongSelection}
-                ></input>
+                  onChange={handleStyleChange}
+                >
+                  Submit
+                </button> */}
               </div>
             </div>
           )}
         </div>
-        <Sketch setup={setup} draw={draw} preload={preload} />
-        {/* {isLoading ? (
-          <div className="loading">Loading...</div>
+        {removeCanvas ? (
+          <UserSketch userSettings={userSettings} />
         ) : (
           <Sketch setup={setup} draw={draw} preload={preload} />
-        )} */}
+        )}
       </main>
     </>
   );
