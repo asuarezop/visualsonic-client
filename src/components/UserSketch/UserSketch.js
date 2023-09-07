@@ -13,12 +13,14 @@ export default function UserSketch(props) {
       let fft;
       let song;
       let img;
+      let analyser;
+      let audioContext;
+      let source;
       let canvasWidth = window.innerWidth;
       let canvasHeight = window.innerHeight;
 
       //Loading new user's audio file
       song = new Audio(audioURL);
-
       //Loading new user's image file
       // img = new window.p5.Image();
       // img.src = imageURL;
@@ -35,37 +37,35 @@ export default function UserSketch(props) {
       p.setup = () => {
         p.createCanvas(canvasWidth, canvasHeight);
         fft = new window.p5.FFT(0.3);
+
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 256; // Adjust the FFT size as needed
+
+        source = audioContext.createMediaElementSource(
+          document.getElementById("audioElement")
+        );
+        source.connect(analyser);
+        analyser.connect(audioContext.destination);
+
+        // Start playing the audio
+        document.getElementById("audioElement").src = audioURL;
+        document.getElementById("audioElement").play();
       };
 
       p.draw = () => {
         p.background(0);
         p.stroke(255);
 
-        const audioContext = new AudioContext();
-        const analyser = audioContext.createAnalyser();
-        analyser.fftSize = 256; // Adjust the FFT size as needed
-
-        const audioElement = document.getElementById("audioElement");
-        const source = audioContext.createMediaElementSource(audioElement);
-        source.connect(analyser);
-        analyser.connect(audioContext.destination);
-
-        // Get the audio data from the audio element
         const bufferLength = analyser.frequencyBinCount;
         const audioData = new Uint8Array(bufferLength);
-
-        // Get the audio data from the analyser
         analyser.getByteTimeDomainData(audioData);
-
-        audioElement.src = audioURL;
-        audioElement.play();
 
         p.beginShape();
         for (let i = 0; i < bufferLength; i++) {
-          const x = p.map(i, 0, bufferLength, 0, canvasWidth);
+          const x = p.map(i, 0, bufferLength, canvasWidth);
           const y = p.map(audioData[i], 0, 255, 0, canvasHeight);
 
-          //change the line shape of waveform
           p.vertex(x, y);
         }
         p.endShape();

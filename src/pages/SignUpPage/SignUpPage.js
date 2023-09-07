@@ -13,7 +13,7 @@ function SignUpPage() {
           <h1 className="sign-up-card__title">Create Your Account</h1>
           <p className="sign-up-card__sub-title">
             Welcome, register your details below to save your own visualizer
-            profile!
+            profile! (coming soon)
           </p>
           <form className="form" onSubmit={handleSubmit}>
             <div className="form-input">

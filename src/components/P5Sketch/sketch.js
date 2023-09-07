@@ -5,6 +5,12 @@ import "p5/lib/addons/p5.sound";
 import "./sketch.scss";
 import UserSketch from "../UserSketch/UserSketch";
 import songFile from "../../assets/sounds/81BPM_Massive_(Original Mix).mp3";
+import songFile2 from "../../assets/sounds/09 Underwater Echo.mp3";
+import songFile3 from "../../assets/sounds/19 Tunnel Vision.wav";
+import songFile4 from "../../assets/sounds/120BPM_Looped_(Original Mix).mp3";
+import songFile5 from "../../assets/sounds/126BPM_Habstrakt - High.mp3";
+import songFile6 from "../../assets/sounds/127BPM_Some Kind of Game_(Original Mix).mp3";
+import songFile7 from "../../assets/sounds/HOME - Before The Night - 05 Above All.mp3";
 import imgFile from "../../assets/images/Home Screen Background.jpg";
 import uploadIcon from "../../assets/icons/upload-solid.svg";
 import gearIcon from "../../assets/icons/gear-solid.svg";
@@ -26,6 +32,7 @@ function P5Sketch(props) {
   const [imageFile, setImageFile] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedStyle, setSelectedStyle] = useState("");
+  const [selectedTrack, setSelectedTrack] = useState("");
 
   //To update new user selections
   const [userSettings, setUserSettings] = useState({
@@ -60,7 +67,7 @@ function P5Sketch(props) {
       setAudioURL(url);
     }
 
-    // console.log("New audio file loaded:", uploadedAudioFile);
+    console.log("New audio file loaded:", uploadedAudioFile);
   }
 
   //Setting user image selection
@@ -74,7 +81,7 @@ function P5Sketch(props) {
       const url = URL.createObjectURL(uploadedImageFile);
       setImageURL(url);
     }
-    // console.log("New image file loaded:", uploadedImageFile);
+    console.log("New image file loaded:", uploadedImageFile);
   }
 
   //Setting user visualizer color selection
@@ -82,30 +89,28 @@ function P5Sketch(props) {
     const visualizerColor = e.target.value;
     setColorName(visualizerColor);
     setSelectedColor(visualizerColor);
-    // console.log("New visualizer color loaded:", e.target.value);
+    console.log("New visualizer color loaded:", e.target.value);
   }
 
   //Setting user visualizer style selection
   function handleStyleChange(e) {
     const visualizerStyle = e.target.value;
     setSelectedStyle(visualizerStyle);
-    // console.log("New visualizer style loaded:", visualizerStyle);
+    console.log("New visualizer style loaded:", visualizerStyle);
   }
 
   const preload = (p) => {
-    p.soundFormats("mp3");
+    p.soundFormats("mp3", "wav", "m4a");
   };
 
   function songLoaded(song) {
     songFile = song;
-
-    // console.log("Your song has succesfully loaded");
+    console.log("Your song has succesfully loaded");
   }
 
   function imgLoaded(img) {
     imgFile = img;
-
-    // console.log("Your image has succesfully loaded");
+    console.log("Your image has succesfully loaded");
   }
 
   const setup = (p, canvasParentRef) => {
@@ -132,6 +137,43 @@ function P5Sketch(props) {
       p.remove();
     }
 
+    // if (selectedTrack === "massive") {
+    //   // song.stop();
+
+    //   song = p.loadSound(songFile, songLoaded);
+    // }
+    // if (selectedTrack === "echo") {
+    //   // song.stop();
+
+    //   song = p.loadSound(songFile2, songLoaded);
+    // }
+    // if (selectedTrack === "tunnel") {
+    //   // song.stop();
+
+    //   song = p.loadSound(songFile3, songLoaded);
+    // }
+    // if (selectedTrack === "looped") {
+    //   // song.stop();
+
+    //   song = p.loadSound(songFile4, songLoaded);
+    // }
+
+    // if (selectedTrack === "higher") {
+    //   // song.stop();
+
+    //   song = p.loadSound(songFile5, songLoaded);
+    // }
+    // if (selectedTrack === "game") {
+    //   // song.stop();
+
+    //   song = p.loadSound(songFile6, songLoaded);
+    // }
+    // if (selectedTrack === "before") {
+    //   // song.stop();
+
+    //   song = p.loadSound(songFile7, songLoaded);
+    // }
+
     p.background(0);
 
     //Make changes to waveform stroke line here:
@@ -142,11 +184,6 @@ function P5Sketch(props) {
     let wave = fft.waveform();
 
     p.translate(canvasWidth / 2, canvasHeight / 2);
-
-    // NOTE: Do not use setState in the draw function or in functions that are executed
-    // in the draw function...
-    // please use normal variables or class properties for these purposes
-    // x++;
 
     fft.analyze();
 
@@ -230,6 +267,15 @@ function P5Sketch(props) {
     } else {
       song.playMode("restart");
       song.play();
+    }
+  };
+
+  const handleTrackChange = (e) => {
+    const trackSelection = e.target.value;
+    console.log(trackSelection);
+
+    if (trackSelection) {
+      setSelectedTrack(trackSelection);
     }
   };
 
@@ -327,6 +373,7 @@ function P5Sketch(props) {
             <div className="upload-files">
               <span className="upload-files__title">
                 Select a song, image, and color to generate your visualizer
+                (song and image not yet available)
               </span>
               <div className="selected-audio">
                 <input
@@ -396,7 +443,7 @@ function P5Sketch(props) {
                   htmlFor="visualizerListings"
                   className="selected-style__title"
                 >
-                  Choose your visualizer style:
+                  Choose your visualizer style: (coming soon feature)
                 </label>
                 <select
                   className="selected-style__options"
@@ -407,30 +454,48 @@ function P5Sketch(props) {
                   <option value="bar">Bar visualizer</option>
                   <option value="simple">Simple line visualizer</option>
                 </select>
-                {/* <button
-                  className="selected-style__input"
-                  id="submitButton"
-                  type="submit"
-                  onChange={handleStyleChange}
-                >
-                  Submit
-                </button> */}
               </div>
+              {/* <div className="selected-track">
+                <label
+                  htmlFor="visualizerTracks"
+                  className="selected-track__title"
+                >
+                  Choose your track:
+                </label>
+                <select
+                  className="selected-track__options"
+                  id="visualizerTracks"
+                  onChange={handleTrackChange}
+                  value={selectedTrack}
+                >
+                  <option value="massive">Massive by Drake</option>
+                  <option value="looped">Looped by Kiasmos</option>
+                  <option value="echo">
+                    Underwater Echo by Approaching Nirvana
+                  </option>
+                  <option value="tunnel">Tunnel Vision by Subtact</option>
+                  <option value="higher">Higher Love by Habstrakt</option>
+                  <option value="game">
+                    Some Kind of Game by Against All Logic
+                  </option>
+                  <option value="before">Before the Night by HOME</option>
+                </select>
+              </div> */}
             </div>
           )}
         </div>
-        {removeCanvas ? (
+        {/* {removeCanvas ? (
           <UserSketch
             setup={setup}
             draw={draw}
             preload={preload}
-            // userSettings={userSettings}
             audioURL={audioURL}
             imageURL={imageURL}
           />
         ) : (
           <Sketch setup={setup} draw={draw} preload={preload} />
-        )}
+        )} */}
+        <Sketch setup={setup} draw={draw} preload={preload} />
       </main>
     </>
   );
