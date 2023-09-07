@@ -18,8 +18,6 @@ let song;
 let img;
 let fft;
 let amp;
-// let audioLoaded = false;
-// let imageLoaded = false;
 let particles = [];
 
 function P5Sketch(props) {
@@ -37,8 +35,9 @@ function P5Sketch(props) {
     newStyle: "Circle",
   });
 
-  // const [audioURL, setAudioURL] = useState(null);
-  // const [imageURL, setImageURL] = useState(null);
+  //To store file URL for reading back data
+  const [audioURL, setAudioURL] = useState(null);
+  const [imageURL, setImageURL] = useState(null);
 
   //To toggle drop down menu and user sketch
   const [dropDown, setDropDown] = useState(false);
@@ -56,7 +55,12 @@ function P5Sketch(props) {
     setAudioName(uploadedAudioFile.name);
     setAudioFile(uploadedAudioFile);
 
-    console.log("New audio file loaded:", uploadedAudioFile);
+    if (uploadedAudioFile) {
+      const url = URL.createObjectURL(uploadedAudioFile);
+      setAudioURL(url);
+    }
+
+    // console.log("New audio file loaded:", uploadedAudioFile);
   }
 
   //Setting user image selection
@@ -65,7 +69,12 @@ function P5Sketch(props) {
 
     setImageName(uploadedImageFile.name);
     setImageFile(uploadedImageFile);
-    console.log("New image file loaded:", uploadedImageFile);
+
+    if (uploadedImageFile) {
+      const url = URL.createObjectURL(uploadedImageFile);
+      setImageURL(url);
+    }
+    // console.log("New image file loaded:", uploadedImageFile);
   }
 
   //Setting user visualizer color selection
@@ -73,14 +82,14 @@ function P5Sketch(props) {
     const visualizerColor = e.target.value;
     setColorName(visualizerColor);
     setSelectedColor(visualizerColor);
-    console.log("New visualizer color loaded:", e.target.value);
+    // console.log("New visualizer color loaded:", e.target.value);
   }
 
   //Setting user visualizer style selection
   function handleStyleChange(e) {
     const visualizerStyle = e.target.value;
     setSelectedStyle(visualizerStyle);
-    console.log("New visualizer style loaded:", visualizerStyle);
+    // console.log("New visualizer style loaded:", visualizerStyle);
   }
 
   const preload = (p) => {
@@ -90,13 +99,13 @@ function P5Sketch(props) {
   function songLoaded(song) {
     songFile = song;
 
-    console.log("Your song has succesfully loaded");
+    // console.log("Your song has succesfully loaded");
   }
 
   function imgLoaded(img) {
     imgFile = img;
 
-    console.log("Your image has succesfully loaded");
+    // console.log("Your image has succesfully loaded");
   }
 
   const setup = (p, canvasParentRef) => {
@@ -232,6 +241,7 @@ function P5Sketch(props) {
       newColor: selectedColor,
       newStyle: selectedStyle,
     };
+
     setUserSettings(uploadedSettings);
 
     setRemoveCanvas(true);
@@ -410,7 +420,14 @@ function P5Sketch(props) {
           )}
         </div>
         {removeCanvas ? (
-          <UserSketch userSettings={userSettings} />
+          <UserSketch
+            setup={setup}
+            draw={draw}
+            preload={preload}
+            // userSettings={userSettings}
+            audioURL={audioURL}
+            imageURL={imageURL}
+          />
         ) : (
           <Sketch setup={setup} draw={draw} preload={preload} />
         )}
