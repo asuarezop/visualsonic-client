@@ -36,7 +36,7 @@ function P5Sketch(props) {
 
   //To update new user selections
   const [userSettings, setUserSettings] = useState({
-    newAudio: songFile,
+    newAudio: songFile3,
     newImage: imgFile,
     newColor: "#000",
     newStyle: "Circle",
@@ -104,7 +104,7 @@ function P5Sketch(props) {
   };
 
   function songLoaded(song) {
-    songFile = song;
+    songFile3 = song;
     console.log("Your song has succesfully loaded");
   }
 
@@ -136,43 +136,6 @@ function P5Sketch(props) {
     if (removeCanvas) {
       p.remove();
     }
-
-    // if (selectedTrack === "massive") {
-    //   // song.stop();
-
-    //   song = p.loadSound(songFile, songLoaded);
-    // }
-    // if (selectedTrack === "echo") {
-    //   // song.stop();
-
-    //   song = p.loadSound(songFile2, songLoaded);
-    // }
-    // if (selectedTrack === "tunnel") {
-    //   // song.stop();
-
-    //   song = p.loadSound(songFile3, songLoaded);
-    // }
-    // if (selectedTrack === "looped") {
-    //   // song.stop();
-
-    //   song = p.loadSound(songFile4, songLoaded);
-    // }
-
-    // if (selectedTrack === "higher") {
-    //   // song.stop();
-
-    //   song = p.loadSound(songFile5, songLoaded);
-    // }
-    // if (selectedTrack === "game") {
-    //   // song.stop();
-
-    //   song = p.loadSound(songFile6, songLoaded);
-    // }
-    // if (selectedTrack === "before") {
-    //   // song.stop();
-
-    //   song = p.loadSound(songFile7, songLoaded);
-    // }
 
     p.background(0);
 
