@@ -1,10 +1,13 @@
-# Getting Started with Create React App
+# VisualSonic
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+An interactive audio visualization application designed to enhance the music experience for musicians, artists, DJs, live-show events, and entertainment event spaces. 
+It offers pre-built audio visualizers and tools to elevate your music and artist brand.
 
-## Available Scripts
+## Getting Started
 
-In the project directory, you can run:
+To setup this project, you can run the following commands:
+
+### `npm i`
 
 ### `npm start`
 
@@ -14,57 +17,45 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
-### `npm test`
+## Tech Stack
+Front-end: HTML, SASS, JavaScript, React, p5.js
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Back-end: Node, Express, CORS
 
-### `npm run build`
+## Documentation
+https://p5js.org/reference/
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Screenshot
+![image](https://github.com/asuarezop/visualsonic-client/assets/43550294/54fd2ddb-c5fe-47a1-988f-525698e146d0)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Features (Custom Profile Features Coming Soon)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+* Select Visualizer Style: Use the arrow keys to choose your preferred visualizer style (in progress).
 
-### `npm run eject`
+* Load Music: Upload an MP3 file from your local computer to play with the visualizer (feature coming soon).
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+* Customize Background: Pick a custom background image to display alongside your track (feature coming soon, must be in JPEG format).
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+* Apply Settings: Click the "Apply" button on the top-right corner to save your settings and load your custom visualizer.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+* Save Profiles: Create and save custom visualizer profiles by clicking the "Sign Up" link on the top-left navigation bar (feature coming soon).
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Lessons / Insights Learned
+During the development of VisualSonic, there were many unexpected challenges that occurred. A common theme throughout was learning the limitations of the library you're working with and 
+how to work within those restrictions to get the result you want. This came when working with integration of audio playback in the browser, here's what I've learned:
 
-## Learn More
+1) Plan for the unexpected
+   * In working with the p5.js library and React.js, there were certain restrictions that prevented proper loading of audio files. A thorough examination of the problem was necessary in conjunction with thorough 
+     researching and debugging. Learning about other similar technologies and comparing their features to the current technology in use was key in getting past roadblocks during development.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+2) Be adaptable
+   * There were times when choosing one solution made other problems rise to the surface. Managing the project working state and dealing with version control played a big role in handling edge cases or 
+     errors. Being able to pivot from one decision to another and learning to be flexible in the development process led me to understand the code much better, which improved my problem-solving skills overall.
+   
+3) Experimentation
+   * Having an open mind and approaching a problem from different perspectives was critical in implementing the final features of the project. This taught me the importance of testing and iterating on existing 
+     ideas to achieve a result that wouldn't have been thought of before. Learning the tools of the p5 library and their functions gave me a holistic view of what features to keep versus which features to 
+     eliminate altogether.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Authors
+Anthony Suarez - https://github.com/asuarezop
