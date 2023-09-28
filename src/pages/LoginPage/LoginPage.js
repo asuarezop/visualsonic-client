@@ -1,24 +1,21 @@
-import "./LoginPage.scss";
-
+import './LoginPage.scss';
 
 function LoginPage() {
   function handleSubmit(e) {
     e.preventDefault();
-
-   
   }
   return (
     <>
       <form className="login-form" onSubmit={handleSubmit}>
         <div className="form-input">
           <label className="form-input__title">
-            First Name
+            Email
             <input
-              className="form-input__firstname-title"
+              className="form-input__email-title"
               id="title"
               type="text"
-              name="firstName"
-              placeholder="Enter your first name"
+              name="email"
+              placeholder="Email"
             ></input>
           </label>
         </div>
