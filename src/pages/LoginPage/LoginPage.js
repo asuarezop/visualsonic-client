@@ -1,10 +1,26 @@
 import './LoginPage.scss';
+import { useState } from 'react';
+import { auth } from '../../config/firebase';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import visualizerGif from '../../assets/images/ncs.gif';
+import googleIcon from '../../assets/icons/logo-google.svg';
 
 function LoginPage() {
-  function handleSubmit(e) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-  }
+  };
+
+  const signIn = async () => {
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <>
       <section className="login">
@@ -20,6 +36,7 @@ function LoginPage() {
                   type="text"
                   name="email"
                   placeholder="Email"
+                  onChange={(e) => setEmail(e.target.value)}
                 ></input>
               </label>
             </div>
@@ -32,6 +49,7 @@ function LoginPage() {
                   type="password"
                   name="password"
                   placeholder="Password"
+                  onChange={(e) => setPassword(e.target.value)}
                 ></input>
               </label>
             </div>
@@ -39,6 +57,7 @@ function LoginPage() {
               <button
                 className="form-button__submit form-button__submit--cta"
                 type="submit"
+                onClick={signIn}
               >
                 Sign In
               </button>
