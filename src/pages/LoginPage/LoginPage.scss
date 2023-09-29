@@ -113,6 +113,44 @@ FONT SIZE SYSTEM (px)
           }
         }
       }
+
+      &__divider {
+        stroke-width: 1px;
+        fill: $secondary-color-lightblack;
+      }
+    }
+
+    .login-option {
+      margin-top: 2rem;
+
+      &__title {
+        margin-bottom: 1.5rem;
+      }
+
+      .login-provider {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 10vw;
+        background-color: $primary-color-white;
+        padding: 0.6rem;
+        border: 1px solid $secondary-color-lightblack;
+        border-top-left-radius: 0.25rem;
+        border-top-right-radius: 0.25rem;
+        border-bottom-left-radius: 0.25rem;
+        border-bottom-right-radius: 0.25rem;
+
+        &__logo {
+          width: 1.75rem;
+          height: 1.75rem;
+        }
+
+        &__text {
+          font-size: 1rem;
+          font-weight: 600;
+          color: $primary-color-black;
+        }
+      }
     }
   }
 

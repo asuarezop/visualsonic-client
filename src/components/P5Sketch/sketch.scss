@@ -1,7 +1,7 @@
-@use "../../styles/partials/variables" as *;
-@use "../../styles/partials/mixins" as *;
-@use "../../styles/partials/global" as *;
-@use "../../styles/partials/typography" as *;
+@use '../../styles/partials/variables' as *;
+@use '../../styles/partials/mixins' as *;
+@use '../../styles/partials/global' as *;
+@use '../../styles/partials/typography' as *;
 
 /*
 SPACING SYSTEM (px)
@@ -56,7 +56,7 @@ FONT SIZE SYSTEM (px)
 
         &:hover {
           cursor: pointer;
-          background-color: $secondar-color-lightblack;
+          background-color: $secondary-color-lightblack;
         }
       }
 
@@ -74,7 +74,7 @@ FONT SIZE SYSTEM (px)
 
         &:hover {
           cursor: pointer;
-          background-color: $secondar-color-lightblack;
+          background-color: $secondary-color-lightblack;
         }
       }
 
@@ -91,7 +91,7 @@ FONT SIZE SYSTEM (px)
 
         &:hover {
           cursor: pointer;
-          background-color: $secondar-color-lightblack;
+          background-color: $secondary-color-lightblack;
         }
       }
     }
@@ -115,7 +115,7 @@ FONT SIZE SYSTEM (px)
 
         &:hover {
           cursor: pointer;
-          background-color: $secondar-color-lightblack;
+          background-color: $secondary-color-lightblack;
         }
       }
     }
@@ -238,7 +238,7 @@ FONT SIZE SYSTEM (px)
   }
 
   .selected-style {
-    font-family: "Poppins";
+    font-family: 'Poppins';
     margin-top: 1rem;
     font-size: 0.875rem;
     color: $primary-color-white;
@@ -254,7 +254,7 @@ FONT SIZE SYSTEM (px)
 
     &__options {
       width: 13vw;
-      font-family: "Poppins";
+      font-family: 'Poppins';
       padding: 0.2rem;
       border-top-left-radius: 0.25rem;
       border-top-right-radius: 0.25rem;
@@ -263,7 +263,7 @@ FONT SIZE SYSTEM (px)
     }
 
     &__input {
-      font-family: "Poppins";
+      font-family: 'Poppins';
       width: 13vw;
       background-color: $secondary-color-alabaster;
       color: $secondary-color-gunmetal;
@@ -276,7 +276,7 @@ FONT SIZE SYSTEM (px)
   }
 
   .selected-track {
-    font-family: "Poppins";
+    font-family: 'Poppins';
     margin-top: 1rem;
     font-size: 0.875rem;
     color: $primary-color-white;
@@ -292,7 +292,7 @@ FONT SIZE SYSTEM (px)
 
     &__options {
       width: 13vw;
-      font-family: "Poppins";
+      font-family: 'Poppins';
       padding: 0.2rem;
       border-top-left-radius: 0.25rem;
       border-top-right-radius: 0.25rem;

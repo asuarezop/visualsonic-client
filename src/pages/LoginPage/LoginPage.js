@@ -25,7 +25,7 @@ function LoginPage() {
     <>
       <section className="login">
         <div className="login-card">
-          <h1 className="login-card__title">Sign In</h1>
+          <h1 className="login-card__title">Sign In With Email</h1>
           <form className="form" onSubmit={handleSubmit}>
             <div className="form-input">
               <label className="form-input__title">
@@ -62,7 +62,19 @@ function LoginPage() {
                 Sign In
               </button>
             </div>
+            <hr className="form__divider"></hr>
           </form>
+          <div className="login-option">
+            <h2 className="login-option__title">Sign In With...</h2>
+            <div className="login-provider">
+              <img
+                className="login-provider__logo"
+                src={googleIcon}
+                alt="Google Logo"
+              />
+              <p className="login-provider__text">GOOGLE</p>
+            </div>
+          </div>
         </div>
         <div className="sign-up-preview">
           <h2 className="sign-up-preview__title">Welcome to VisualSonic</h2>
