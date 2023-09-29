@@ -1,19 +1,15 @@
-import React from "react";
-import Sketch from "react-p5";
-import { useState } from "react";
-import "p5/lib/addons/p5.sound";
-import "./sketch.scss";
-import UserSketch from "../UserSketch/UserSketch";
-import songFile from "../../assets/sounds/81BPM_Massive_(Original Mix).mp3";
-import songFile2 from "../../assets/sounds/09 Underwater Echo.mp3";
-import songFile3 from "../../assets/sounds/19 Tunnel Vision.wav";
-import songFile4 from "../../assets/sounds/120BPM_Looped_(Original Mix).mp3";
-import songFile5 from "../../assets/sounds/126BPM_Habstrakt - High.mp3";
-import songFile6 from "../../assets/sounds/127BPM_Some Kind of Game_(Original Mix).mp3";
-import songFile7 from "../../assets/sounds/HOME - Before The Night - 05 Above All.mp3";
-import imgFile from "../../assets/images/Home Screen Background.jpg";
-import uploadIcon from "../../assets/icons/upload-solid.svg";
-import gearIcon from "../../assets/icons/gear-solid.svg";
+import React from 'react';
+import Sketch from 'react-p5';
+import { useState } from 'react';
+import 'p5/lib/addons/p5.sound';
+import './sketch.scss';
+import db from '../../config/firebase';
+import UserSketch from '../UserSketch/UserSketch';
+import songFile from '../../assets/sounds/81BPM_Massive_(Original Mix).mp3';
+import songFile3 from '../../assets/sounds/19 Tunnel Vision.wav';
+import imgFile from '../../assets/images/Home Screen Background.jpg';
+import uploadIcon from '../../assets/icons/upload-solid.svg';
+import gearIcon from '../../assets/icons/gear-solid.svg';
 
 //REACT-P5 METHOD (WORKS WITH SOUND LIBRARY)
 //All variables used for below functions must be declared outside the component
@@ -28,47 +24,48 @@ let particles = [];
 
 function P5Sketch(props) {
   //To store user input for audio, image, and color
-  const [audioFile, setAudioFile] = useState("");
-  const [imageFile, setImageFile] = useState("");
-  const [selectedColor, setSelectedColor] = useState("");
-  const [selectedStyle, setSelectedStyle] = useState("");
-  const [selectedTrack, setSelectedTrack] = useState("");
-
-  //To update new user selections
-  const [userSettings, setUserSettings] = useState({
-    newAudio: songFile3,
-    newImage: imgFile,
-    newColor: "#000",
-    newStyle: "Circle",
-  });
+  const [audioFile, setAudioFile] = useState('');
+  const [imageFile, setImageFile] = useState('');
+  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedStyle, setSelectedStyle] = useState('');
+  const [selectedTrack, setSelectedTrack] = useState('');
 
   //To store file URL for reading back data
   const [audioURL, setAudioURL] = useState(null);
   const [imageURL, setImageURL] = useState(null);
+
+  //To update new user selections
+  const [userSettings, setUserSettings] = useState({
+    newAudio: '',
+    newImage: imgFile,
+    newColor: '#000',
+    newStyle: 'Circle',
+  });
 
   //To toggle drop down menu and user sketch
   const [dropDown, setDropDown] = useState(false);
   const [removeCanvas, setRemoveCanvas] = useState(false);
 
   //To set state of file names
-  const [audioName, setAudioName] = useState("");
-  const [imageName, setImageName] = useState("");
-  const [colorName, setColorName] = useState("");
+  const [audioName, setAudioName] = useState('');
+  const [imageName, setImageName] = useState('');
+  const [colorName, setColorName] = useState('');
 
   //Setting user song selection
-  function handleAudioFile(e) {
-    const uploadedAudioFile = e.target.files[0];
+  const handleAudioFile = async (e) => {
+    try {
+      const uploadedAudioFile = e.target.files[0];
+      setAudioName(uploadedAudioFile.name);
+      setAudioFile(uploadedAudioFile);
 
-    setAudioName(uploadedAudioFile.name);
-    setAudioFile(uploadedAudioFile);
-
-    if (uploadedAudioFile) {
       const url = URL.createObjectURL(uploadedAudioFile);
       setAudioURL(url);
-    }
 
-    console.log("New audio file loaded:", uploadedAudioFile);
-  }
+      console.log('New audio file loaded:', uploadedAudioFile);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   //Setting user image selection
   function handleImageFile(e) {
@@ -81,7 +78,7 @@ function P5Sketch(props) {
       const url = URL.createObjectURL(uploadedImageFile);
       setImageURL(url);
     }
-    console.log("New image file loaded:", uploadedImageFile);
+    console.log('New image file loaded:', uploadedImageFile);
   }
 
   //Setting user visualizer color selection
@@ -89,28 +86,28 @@ function P5Sketch(props) {
     const visualizerColor = e.target.value;
     setColorName(visualizerColor);
     setSelectedColor(visualizerColor);
-    console.log("New visualizer color loaded:", e.target.value);
+    console.log('New visualizer color loaded:', e.target.value);
   }
 
   //Setting user visualizer style selection
   function handleStyleChange(e) {
     const visualizerStyle = e.target.value;
     setSelectedStyle(visualizerStyle);
-    console.log("New visualizer style loaded:", visualizerStyle);
+    console.log('New visualizer style loaded:', visualizerStyle);
   }
 
   const preload = (p) => {
-    p.soundFormats("mp3", "wav", "m4a");
+    p.soundFormats('mp3', 'wav', 'm4a');
   };
 
   function songLoaded(song) {
     songFile3 = song;
-    console.log("Your song has succesfully loaded");
+    console.log('Your song has succesfully loaded');
   }
 
   function imgLoaded(img) {
     imgFile = img;
-    console.log("Your image has succesfully loaded");
+    console.log('Your image has succesfully loaded');
   }
 
   const setup = (p, canvasParentRef) => {
@@ -225,10 +222,10 @@ function P5Sketch(props) {
       return;
     }
     if (song.isPaused()) {
-      song.playMode("restart");
+      song.playMode('restart');
       song.play();
     } else {
-      song.playMode("restart");
+      song.playMode('restart');
       song.play();
     }
   };
