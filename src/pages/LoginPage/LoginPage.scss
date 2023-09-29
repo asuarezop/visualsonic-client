@@ -131,7 +131,7 @@ FONT SIZE SYSTEM (px)
         display: flex;
         align-items: center;
         justify-content: space-between;
-        width: 10vw;
+        width: 9vw;
         background-color: $primary-color-white;
         padding: 0.6rem;
         border: 1px solid $secondary-color-lightblack;
@@ -139,6 +139,11 @@ FONT SIZE SYSTEM (px)
         border-top-right-radius: 0.25rem;
         border-bottom-left-radius: 0.25rem;
         border-bottom-right-radius: 0.25rem;
+
+        &--cta:hover {
+          background-color: $secondary-color-greywhite;
+          cursor: pointer;
+        }
 
         &__logo {
           width: 1.75rem;

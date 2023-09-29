@@ -1,7 +1,7 @@
 import './LoginPage.scss';
 import { useState } from 'react';
-import { auth } from '../../config/firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth, googleProvider } from '../../config/firebase';
+import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import visualizerGif from '../../assets/images/ncs.gif';
 import googleIcon from '../../assets/icons/logo-google.svg';
 
@@ -16,6 +16,14 @@ function LoginPage() {
   const signIn = async () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const signInGoogle = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
     } catch (err) {
       console.error(err);
     }
@@ -66,14 +74,17 @@ function LoginPage() {
           </form>
           <div className="login-option">
             <h2 className="login-option__title">Sign In With...</h2>
-            <div className="login-provider">
+            <button
+              className="login-provider login-provider--cta"
+              onClick={signInGoogle}
+            >
               <img
                 className="login-provider__logo"
                 src={googleIcon}
                 alt="Google Logo"
               />
               <p className="login-provider__text">GOOGLE</p>
-            </div>
+            </button>
           </div>
         </div>
         <div className="sign-up-preview">
