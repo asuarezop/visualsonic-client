@@ -73,7 +73,7 @@ function P5Sketch(props) {
 
     const audioRef = ref(storage, `audio/${audioFile.name + v4()}`);
     uploadBytes(audioRef, audioFile).then(() => {
-      alert('New audio file uploaded:');
+      alert('New audio file uploaded');
     });
   };
 
@@ -98,7 +98,7 @@ function P5Sketch(props) {
 
     const imageRef = ref(storage, `images/${imageFile.name + v4()}`);
     uploadBytes(imageRef, imageFile).then(() => {
-      alert('New image file uploaded:');
+      alert('New image file uploaded');
     });
   };
 
