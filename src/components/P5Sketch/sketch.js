@@ -3,7 +3,9 @@ import Sketch from 'react-p5';
 import { useState } from 'react';
 import 'p5/lib/addons/p5.sound';
 import './sketch.scss';
-import db from '../../config/firebase';
+import { storage } from '../../config/firebase';
+import { ref, uploadBytes } from 'firebase/storage';
+import { v4 } from 'uuid';
 import UserSketch from '../UserSketch/UserSketch';
 import songFile from '../../assets/sounds/81BPM_Massive_(Original Mix).mp3';
 import songFile3 from '../../assets/sounds/19 Tunnel Vision.wav';
@@ -58,28 +60,47 @@ function P5Sketch(props) {
       setAudioName(uploadedAudioFile.name);
       setAudioFile(uploadedAudioFile);
 
-      const url = URL.createObjectURL(uploadedAudioFile);
-      setAudioURL(url);
-
-      console.log('New audio file loaded:', uploadedAudioFile);
+      console.log('New audio file loaded:', audioFile);
     } catch (err) {
       console.error(err);
     }
   };
 
-  //Setting user image selection
-  function handleImageFile(e) {
-    const uploadedImageFile = e.target.files[0];
-
-    setImageName(uploadedImageFile.name);
-    setImageFile(uploadedImageFile);
-
-    if (uploadedImageFile) {
-      const url = URL.createObjectURL(uploadedImageFile);
-      setImageURL(url);
+  const handleAudioUpload = () => {
+    if (audioFile == null) {
+      return;
     }
-    console.log('New image file loaded:', uploadedImageFile);
-  }
+
+    const audioRef = ref(storage, `audio/${audioFile.name + v4()}`);
+    uploadBytes(audioRef, audioFile).then(() => {
+      alert('New audio file uploaded:');
+    });
+  };
+
+  //Setting user image selection
+  const handleImageFile = async (e) => {
+    try {
+      const uploadedImageFile = e.target.files[0];
+
+      setImageName(uploadedImageFile.name);
+      setImageFile(uploadedImageFile);
+
+      console.log('New image file loaded:', uploadedImageFile);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleImageUpload = () => {
+    if (imageFile == null) {
+      return;
+    }
+
+    const imageRef = ref(storage, `images/${imageFile.name + v4()}`);
+    uploadBytes(imageRef, imageFile).then(() => {
+      alert('New image file uploaded:');
+    });
+  };
 
   //Setting user visualizer color selection
   function handleColor(e) {
@@ -355,11 +376,19 @@ function P5Sketch(props) {
                   />
                   &nbsp;Select audio file
                 </label>
-                <span className="selected-file">
-                  <strong className="selected-file__text">Chosen file: </strong>
-                  <span id="file-name">{audioName}</span>
-                </span>
+                <div className="upload-audio">
+                  <button
+                    onClick={handleAudioUpload}
+                    className="upload-audio__btn upload-audio__btn--hover"
+                  >
+                    Upload Audio
+                  </button>
+                </div>
               </div>
+              <span className="selected-file">
+                <strong className="selected-file__text">Chosen file: </strong>
+                <span id="file-name">{audioName}</span>
+              </span>
               <div className="selected-image">
                 <input
                   onChange={handleImageFile}
@@ -380,11 +409,19 @@ function P5Sketch(props) {
                   />
                   &nbsp;Select image file
                 </label>
-                <span className="selected-file">
-                  <strong className="selected-file__text">Chosen file: </strong>
-                  <span id="file-name">{imageName}</span>
-                </span>
+                <div className="upload-image">
+                  <button
+                    onClick={handleImageUpload}
+                    className="upload-image__btn upload-image__btn--hover"
+                  >
+                    Upload Image
+                  </button>
+                </div>
               </div>
+              <span className="selected-file">
+                <strong className="selected-file__text">Chosen file: </strong>
+                <span id="file-name">{imageName}</span>
+              </span>
               <div className="visualizer-color">
                 <label htmlFor="visualizerColor" className="form-input__title">
                   Visualizer Color:
