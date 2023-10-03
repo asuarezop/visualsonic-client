@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Sketch from 'react-p5';
 import { useState } from 'react';
 import 'p5/lib/addons/p5.sound';
 import './sketch.scss';
 import { storage } from '../../config/firebase';
-import { ref, uploadBytes } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { v4 } from 'uuid';
 import UserSketch from '../UserSketch/UserSketch';
 import songFile from '../../assets/sounds/81BPM_Massive_(Original Mix).mp3';
-import songFile3 from '../../assets/sounds/19 Tunnel Vision.wav';
 import imgFile from '../../assets/images/Home Screen Background.jpg';
 import uploadIcon from '../../assets/icons/upload-solid.svg';
 import gearIcon from '../../assets/icons/gear-solid.svg';
@@ -30,7 +29,6 @@ function P5Sketch(props) {
   const [imageFile, setImageFile] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
   const [selectedStyle, setSelectedStyle] = useState('');
-  const [selectedTrack, setSelectedTrack] = useState('');
 
   //To store file URL for reading back data
   const [audioURL, setAudioURL] = useState(null);
@@ -38,7 +36,7 @@ function P5Sketch(props) {
 
   //To update new user selections
   const [userSettings, setUserSettings] = useState({
-    newAudio: '',
+    newAudio: songFile,
     newImage: imgFile,
     newColor: '#000',
     newStyle: 'Circle',
@@ -72,8 +70,11 @@ function P5Sketch(props) {
     }
 
     const audioRef = ref(storage, `audio/${audioFile.name + v4()}`);
-    uploadBytes(audioRef, audioFile).then(() => {
+    uploadBytes(audioRef, audioFile).then((snapshot) => {
       alert('New audio file uploaded');
+      getDownloadURL(snapshot.ref).then((url) => {
+        setAudioURL(url);
+      });
     });
   };
 
@@ -81,7 +82,6 @@ function P5Sketch(props) {
   const handleImageFile = async (e) => {
     try {
       const uploadedImageFile = e.target.files[0];
-
       setImageName(uploadedImageFile.name);
       setImageFile(uploadedImageFile);
 
@@ -97,8 +97,11 @@ function P5Sketch(props) {
     }
 
     const imageRef = ref(storage, `images/${imageFile.name + v4()}`);
-    uploadBytes(imageRef, imageFile).then(() => {
+    uploadBytes(imageRef, imageFile).then((snapshot) => {
       alert('New image file uploaded');
+      getDownloadURL(snapshot.ref).then((url) => {
+        setImageURL(url);
+      });
     });
   };
 
@@ -122,7 +125,7 @@ function P5Sketch(props) {
   };
 
   function songLoaded(song) {
-    songFile3 = song;
+    songFile = song;
     console.log('Your song has succesfully loaded');
   }
 
@@ -248,15 +251,6 @@ function P5Sketch(props) {
     } else {
       song.playMode('restart');
       song.play();
-    }
-  };
-
-  const handleTrackChange = (e) => {
-    const trackSelection = e.target.value;
-    console.log(trackSelection);
-
-    if (trackSelection) {
-      setSelectedTrack(trackSelection);
     }
   };
 
@@ -452,32 +446,6 @@ function P5Sketch(props) {
                   <option value="simple">Simple line visualizer</option>
                 </select>
               </div>
-              {/* <div className="selected-track">
-                <label
-                  htmlFor="visualizerTracks"
-                  className="selected-track__title"
-                >
-                  Choose your track:
-                </label>
-                <select
-                  className="selected-track__options"
-                  id="visualizerTracks"
-                  onChange={handleTrackChange}
-                  value={selectedTrack}
-                >
-                  <option value="massive">Massive by Drake</option>
-                  <option value="looped">Looped by Kiasmos</option>
-                  <option value="echo">
-                    Underwater Echo by Approaching Nirvana
-                  </option>
-                  <option value="tunnel">Tunnel Vision by Subtact</option>
-                  <option value="higher">Higher Love by Habstrakt</option>
-                  <option value="game">
-                    Some Kind of Game by Against All Logic
-                  </option>
-                  <option value="before">Before the Night by HOME</option>
-                </select>
-              </div> */}
             </div>
           )}
         </div>
