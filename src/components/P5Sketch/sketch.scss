@@ -1,7 +1,7 @@
-@use "../../styles/partials/variables" as *;
-@use "../../styles/partials/mixins" as *;
-@use "../../styles/partials/global" as *;
-@use "../../styles/partials/typography" as *;
+@use '../../styles/partials/variables' as *;
+@use '../../styles/partials/mixins' as *;
+@use '../../styles/partials/global' as *;
+@use '../../styles/partials/typography' as *;
 
 /*
 SPACING SYSTEM (px)
@@ -56,7 +56,7 @@ FONT SIZE SYSTEM (px)
 
         &:hover {
           cursor: pointer;
-          background-color: $secondar-color-lightblack;
+          background-color: $secondary-color-lightblack;
         }
       }
 
@@ -74,7 +74,7 @@ FONT SIZE SYSTEM (px)
 
         &:hover {
           cursor: pointer;
-          background-color: $secondar-color-lightblack;
+          background-color: $secondary-color-lightblack;
         }
       }
 
@@ -91,7 +91,7 @@ FONT SIZE SYSTEM (px)
 
         &:hover {
           cursor: pointer;
-          background-color: $secondar-color-lightblack;
+          background-color: $secondary-color-lightblack;
         }
       }
     }
@@ -115,7 +115,7 @@ FONT SIZE SYSTEM (px)
 
         &:hover {
           cursor: pointer;
-          background-color: $secondar-color-lightblack;
+          background-color: $secondary-color-lightblack;
         }
       }
     }
@@ -169,7 +169,8 @@ FONT SIZE SYSTEM (px)
     border-bottom-left-radius: 0.25rem;
     border-bottom-right-radius: 0.25rem;
     margin-top: 1rem;
-    width: 14.5%;
+    margin-right: 1.5rem;
+    width: 13.5%;
     padding: 0.4rem;
   }
 
@@ -180,6 +181,8 @@ FONT SIZE SYSTEM (px)
   }
 
   .selected-audio {
+    display: flex;
+
     &__input {
       margin-right: 0.5rem;
     }
@@ -194,21 +197,42 @@ FONT SIZE SYSTEM (px)
       margin-right: 0.5rem;
     }
 
-    .selected-file {
-      font-size: 14px;
+    .upload-audio {
+      &__btn {
+        background-color: $secondary-color-alabaster;
+        color: $secondary-color-gunmetal;
+        border-top-left-radius: 0.25rem;
+        border-top-right-radius: 0.25rem;
+        border-bottom-left-radius: 0.25rem;
+        border-bottom-right-radius: 0.25rem;
+        margin-top: 1rem;
+        padding: 0.6rem;
+        font-size: 0.875rem;
 
-      &__text {
-        color: $primary-color-white;
-        padding-top: 1rem;
-      }
-
-      #file-name {
-        color: $primary-color-white;
+        &--hover:hover {
+          border: 1px solid $primary-color-lightblue;
+          cursor: pointer;
+        }
       }
     }
   }
 
+  .selected-file {
+    font-size: 14px;
+
+    &__text {
+      color: $primary-color-white;
+      padding-top: 1rem;
+    }
+
+    #file-name {
+      color: $primary-color-white;
+    }
+  }
+
   .selected-image {
+    display: flex;
+
     &__input {
       margin-right: 0.5rem;
     }
@@ -233,12 +257,31 @@ FONT SIZE SYSTEM (px)
 
       #file-name {
         color: $primary-color-white;
+      }
+    }
+
+    .upload-image {
+      &__btn {
+        background-color: $secondary-color-alabaster;
+        color: $secondary-color-gunmetal;
+        border-top-left-radius: 0.25rem;
+        border-top-right-radius: 0.25rem;
+        border-bottom-left-radius: 0.25rem;
+        border-bottom-right-radius: 0.25rem;
+        margin-top: 1rem;
+        padding: 0.6rem;
+        font-size: 0.875rem;
+
+        &--hover:hover {
+          border: 1px solid $primary-color-lightblue;
+          cursor: pointer;
+        }
       }
     }
   }
 
   .selected-style {
-    font-family: "Poppins";
+    font-family: 'Poppins';
     margin-top: 1rem;
     font-size: 0.875rem;
     color: $primary-color-white;
@@ -254,7 +297,7 @@ FONT SIZE SYSTEM (px)
 
     &__options {
       width: 13vw;
-      font-family: "Poppins";
+      font-family: 'Poppins';
       padding: 0.2rem;
       border-top-left-radius: 0.25rem;
       border-top-right-radius: 0.25rem;
@@ -263,7 +306,7 @@ FONT SIZE SYSTEM (px)
     }
 
     &__input {
-      font-family: "Poppins";
+      font-family: 'Poppins';
       width: 13vw;
       background-color: $secondary-color-alabaster;
       color: $secondary-color-gunmetal;
@@ -276,7 +319,7 @@ FONT SIZE SYSTEM (px)
   }
 
   .selected-track {
-    font-family: "Poppins";
+    font-family: 'Poppins';
     margin-top: 1rem;
     font-size: 0.875rem;
     color: $primary-color-white;
@@ -292,7 +335,7 @@ FONT SIZE SYSTEM (px)
 
     &__options {
       width: 13vw;
-      font-family: "Poppins";
+      font-family: 'Poppins';
       padding: 0.2rem;
       border-top-left-radius: 0.25rem;
       border-top-right-radius: 0.25rem;
