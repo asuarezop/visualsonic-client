@@ -1,9 +1,9 @@
 // import * as React from 'react';
+import * as p5 from 'p5';
 import { useState, useEffect } from 'react';
 import { Sketch } from '@p5-wrapper/react';
 import('p5/lib/addons/p5.sound');
 (window as any).p5 = p5;
-import * as p5 from 'p5';
 // import './sketch.scss';
 // import { storage } from '../../config/firebase';
 // import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
@@ -19,7 +19,6 @@ import * as p5 from 'p5';
 
 const canvasWidth = window.innerWidth;
 const canvasHeight = window.innerHeight;
-// let p5: object;
 let song: p5.SoundFile;
 let img: p5.Image = new p5.Image(3840, 2160);
 let fft: p5.FFT = new p5.FFT(0.3);
@@ -127,9 +126,6 @@ const sketch: Sketch = (p5) => {
   p5.preload = () => {
     p5.soundFormats('mp3');
   };
-  // const preload = (p) => {
-  //   p.soundFormats('mp3', 'wav', 'm4a');
-  // };
 
   function songLoaded() {
     // songFile = song;
