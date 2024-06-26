@@ -7,6 +7,7 @@ import { storage } from '../../config/firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { v4 } from 'uuid';
 import UserSketch from '../UserSketch/UserSketch';
+import VisualizerControls from '../VisualizerControls/VisualizerControls';
 import songFile from '../../assets/sounds/81BPM_Massive_(Original Mix).mp3';
 import imgFile from '../../assets/images/Home Screen Background.jpg';
 import uploadIcon from '../../assets/icons/upload-solid.svg';
@@ -43,7 +44,7 @@ function P5Sketch(props) {
   });
 
   //To toggle drop down menu and user sketch
-  const [dropDown, setDropDown] = useState(false);
+  // const [dropDown, setDropDown] = useState(false);
   const [removeCanvas, setRemoveCanvas] = useState(false);
 
   //To set state of file names
@@ -256,19 +257,19 @@ function P5Sketch(props) {
     }
   };
 
-  const handleApplyOptions = () => {
-    const uploadedSettings = {
-      ...userSettings,
-      newAudio: audioFile,
-      newImage: imageFile,
-      newColor: selectedColor,
-      newStyle: selectedStyle,
-    };
+  // const handleApplyOptions = () => {
+  //   const uploadedSettings = {
+  //     ...userSettings,
+  //     newAudio: audioFile,
+  //     newImage: imageFile,
+  //     newColor: selectedColor,
+  //     newStyle: selectedStyle,
+  //   };
 
-    setUserSettings(uploadedSettings);
+  //   setUserSettings(uploadedSettings);
 
-    // setRemoveCanvas(true);
-  };
+  //   // setRemoveCanvas(true);
+  // };
 
   class Particle {
     constructor(p) {
@@ -312,7 +313,8 @@ function P5Sketch(props) {
     <>
       <main className="visualizer">
         <div className="visualizer-panel">
-          <div className="visualizer-controls">
+          <VisualizerControls />
+          {/* <div className="visualizer-controls">
             <div
               onClick={(e) => setDropDown(!dropDown)}
               className="visualizer-settings"
@@ -345,8 +347,8 @@ function P5Sketch(props) {
                 Apply
               </button>
             </div>
-          </div>
-          {dropDown && (
+          </div> */}
+          {/* {dropDown && (
             <div className="upload-files">
               <span className="upload-files__title">
                 Select a song, image, and color to generate your visualizer
@@ -449,7 +451,7 @@ function P5Sketch(props) {
                 </select>
               </div>
             </div>
-          )}
+          )} */}
         </div>
         {/* {removeCanvas ? (
           <UserSketch
