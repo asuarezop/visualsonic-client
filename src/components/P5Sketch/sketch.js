@@ -31,8 +31,8 @@ function P5Sketch(props) {
   const [selectedStyle, setSelectedStyle] = useState('');
 
   //To store file URL for reading back data
-  const [audioURL, setAudioURL] = useState(null);
-  const [imageURL, setImageURL] = useState(null);
+  const [audioURL, setAudioURL] = useState('');
+  const [imageURL, setImageURL] = useState('');
 
   //To update new user selections
   const [userSettings, setUserSettings] = useState({
@@ -51,7 +51,7 @@ function P5Sketch(props) {
   const [imageName, setImageName] = useState('');
   const [colorName, setColorName] = useState('');
 
-  //Setting user song selection
+  //Setting user song selection (ONLY USEFUL FOR CONFIRMATION)
   const handleAudioFile = async (e) => {
     try {
       const uploadedAudioFile = e.target.files[0];
@@ -64,6 +64,7 @@ function P5Sketch(props) {
     }
   };
 
+  //Retrieving the uploaded audio file from Firebase Storage
   const handleAudioUpload = () => {
     if (audioFile == null) {
       return;
@@ -78,7 +79,7 @@ function P5Sketch(props) {
     });
   };
 
-  //Setting user image selection
+  //Setting user image selection (ONLY USEFUL FOR CONFIRMATION)
   const handleImageFile = async (e) => {
     try {
       const uploadedImageFile = e.target.files[0];
@@ -91,6 +92,7 @@ function P5Sketch(props) {
     }
   };
 
+  //Retrieving the uploaded image file from Firebase Storage
   const handleImageUpload = () => {
     if (imageFile == null) {
       return;
@@ -150,7 +152,7 @@ function P5Sketch(props) {
 
     fft = new window.p5.FFT(0.3);
 
-    img.filter(p.BLUR, 5);
+    img?.filter(p.BLUR, 5);
   };
 
   const draw = (p) => {
@@ -165,13 +167,13 @@ function P5Sketch(props) {
 
     p.noFill();
 
-    let wave = fft.waveform();
+    let wave = fft?.waveform();
 
     p.translate(canvasWidth / 2, canvasHeight / 2);
 
-    fft.analyze();
+    fft?.analyze();
 
-    amp = fft.getEnergy(20, 200);
+    amp = fft?.getEnergy(20, 200);
 
     p.push();
     if (amp > 242) {
@@ -265,7 +267,7 @@ function P5Sketch(props) {
 
     setUserSettings(uploadedSettings);
 
-    setRemoveCanvas(true);
+    // setRemoveCanvas(true);
   };
 
   class Particle {
