@@ -21,9 +21,6 @@ let amp;
 let particles = [];
 
 function P5Sketch(props) {
-  //To store user input for color
-  const [selectedColor, setSelectedColor] = useState('');
-
   //Visualizer default settings
   const [defaultVisualizerSettings, setDefaultVisualizerSettings] = useState({
     defaultAudio: songFile,
@@ -48,6 +45,16 @@ function P5Sketch(props) {
     imgFile = img;
     console.log('Your image has succesfully loaded');
   }
+
+  //To update default visualizer settings with new user selections (ITS NOT updating original, needs fix)
+  const handleUserSelections = (selections) => {
+    setDefaultVisualizerSettings({
+      defaultAudio: selections.newAudio || songFile,
+      defaultImage: selections.newImage || imgFile,
+      defaultColor: selections.newColor || '#000',
+      defaultStyle: selections.newStyle || 'Circle',
+    });
+  };
 
   const setup = (p, canvasParentRef) => {
     // use parent to render the canvas in this ref
@@ -76,7 +83,7 @@ function P5Sketch(props) {
     p.background(0);
 
     //Make changes to waveform stroke line here:
-    p.stroke(selectedColor);
+    p.stroke(defaultVisualizerSettings.defaultColor);
 
     p.noFill();
 
@@ -211,7 +218,12 @@ function P5Sketch(props) {
     <>
       <main className="visualizer">
         <div className="visualizer-panel">
-          <VisualizerControls play={play} pause={pause} restart={restart} />
+          <VisualizerControls
+            play={play}
+            pause={pause}
+            restart={restart}
+            onSetVisualizer={handleUserSelections}
+          />
         </div>
 
         {/* {removeCanvas ? (

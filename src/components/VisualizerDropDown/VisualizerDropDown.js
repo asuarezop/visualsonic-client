@@ -5,20 +5,12 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import uploadIcon from '../../assets/icons/upload-solid.svg';
 import './VisualizerDropDown.scss';
 
-function VisualizerDropDown({ isDropDown }) {
-  //To update new user selections
-  const [userSettings, setUserSettings] = useState({
-    newAudio: '',
-    newImage: '',
-    newColor: '#000',
-    newStyle: 'Circle',
-  });
-
-  //To store user input for audio, image, and color
+function VisualizerDropDown({ isDropDown, onSetVisualizer }) {
+  //To store user input for audio, image, color and visualizer style
   const [audioFile, setAudioFile] = useState('');
   const [imageFile, setImageFile] = useState('');
-  const [selectedColor, setSelectedColor] = useState(userSettings.newColor);
-  const [selectedStyle, setSelectedStyle] = useState(userSettings.newStyle);
+  const [selectedColor, setSelectedColor] = useState('#000');
+  const [selectedStyle, setSelectedStyle] = useState('Circle');
 
   //To set state of file names
   const [audioName, setAudioName] = useState('');
@@ -99,6 +91,16 @@ function VisualizerDropDown({ isDropDown }) {
     setSelectedStyle(visualizerStyle);
     console.log('New visualizer style loaded:', visualizerStyle);
   }
+
+  //Updating user selections to be applied onto visualizer (ITS NOT updating original, needs fix)
+  const handleApplySelections = () => {
+    onSetVisualizer({
+      newAudio: audioURL,
+      newImage: imageURL,
+      newColor: selectedColor,
+      newStyle: selectedStyle,
+    });
+  };
 
   return (
     isDropDown && (
@@ -195,9 +197,12 @@ function VisualizerDropDown({ isDropDown }) {
             <option value="simple">Simple line visualizer</option>
           </select>
         </div>
-        <div className="save-selection">
-          <button className="save-selection__btn save-selection__btn--hover">
-            Save
+        <div className="apply-selection">
+          <button
+            onClick={handleApplySelections}
+            className="apply-selection__btn apply-selection__btn--hover"
+          >
+            Apply
           </button>
         </div>
       </div>

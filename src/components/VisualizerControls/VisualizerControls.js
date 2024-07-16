@@ -3,11 +3,11 @@ import { useState } from 'react';
 import gearIcon from '../../assets/icons/gear-solid.svg';
 import VisualizerDropDown from '../VisualizerDropDown/VisualizerDropDown';
 
-function VisualizerControls({ play, pause, restart, userSettings }) {
+function VisualizerControls({ play, pause, restart, onSetVisualizer }) {
   //To toggle drop down menu and user sketch
   const [dropDown, setDropDown] = useState(false);
 
-  //To apply user settings to visualizer
+  //To apply saved user settings to visualizer
   // const handleApplyOptions = () => {
   //   const uploadedSettings = {
   //     ...userSettings,
@@ -46,17 +46,21 @@ function VisualizerControls({ play, pause, restart, userSettings }) {
             Restart
           </button>
         </div>
-        <div className="visualizer-apply">
+        {/* <div className="visualizer-apply">
           <button
             // onClick={handleApplyOptions}
             className="visualizer-apply__btn"
           >
             Apply
           </button>
-        </div>
+        </div> */}
       </div>
-
-      <VisualizerDropDown isDropDown={dropDown} userSettings={userSettings} />
+      {dropDown && (
+        <VisualizerDropDown
+          isDropDown={dropDown}
+          onSetVisualizer={onSetVisualizer}
+        />
+      )}
     </div>
   );
 }
