@@ -7,6 +7,7 @@ function VisualizerControls({ play, pause, restart, userSettings }) {
   //To toggle drop down menu and user sketch
   const [dropDown, setDropDown] = useState(false);
 
+  //To apply user settings to visualizer
   // const handleApplyOptions = () => {
   //   const uploadedSettings = {
   //     ...userSettings,
@@ -55,7 +56,7 @@ function VisualizerControls({ play, pause, restart, userSettings }) {
         </div>
       </div>
 
-      <VisualizerDropDown isDropDown={dropDown} />
+      <VisualizerDropDown isDropDown={dropDown} userSettings={userSettings} />
     </div>
   );
 }

@@ -6,11 +6,19 @@ import uploadIcon from '../../assets/icons/upload-solid.svg';
 import './VisualizerDropDown.scss';
 
 function VisualizerDropDown({ isDropDown }) {
+  //To update new user selections
+  const [userSettings, setUserSettings] = useState({
+    newAudio: '',
+    newImage: '',
+    newColor: '#000',
+    newStyle: 'Circle',
+  });
+
   //To store user input for audio, image, and color
   const [audioFile, setAudioFile] = useState('');
   const [imageFile, setImageFile] = useState('');
-  const [selectedColor, setSelectedColor] = useState('');
-  const [selectedStyle, setSelectedStyle] = useState('');
+  const [selectedColor, setSelectedColor] = useState(userSettings.newColor);
+  const [selectedStyle, setSelectedStyle] = useState(userSettings.newStyle);
 
   //To set state of file names
   const [audioName, setAudioName] = useState('');
@@ -169,6 +177,7 @@ function VisualizerDropDown({ isDropDown }) {
               name="visualizerColor"
               placeholder="Choose your visualizer color"
               onChange={handleColor}
+              value={selectedColor}
             ></input>
           </label>
         </div>
@@ -185,6 +194,11 @@ function VisualizerDropDown({ isDropDown }) {
             <option value="bar">Bar visualizer</option>
             <option value="simple">Simple line visualizer</option>
           </select>
+        </div>
+        <div className="save-selection">
+          <button className="save-selection__btn save-selection__btn--hover">
+            Save
+          </button>
         </div>
       </div>
     )

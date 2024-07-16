@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Sketch from 'react-p5';
 import { useState } from 'react';
 import 'p5/lib/addons/p5.sound';
+import p5 from 'react-p5';
 import './sketch.scss';
 import UserSketch from '../UserSketch/UserSketch';
 import VisualizerControls from '../VisualizerControls/VisualizerControls';
@@ -23,12 +24,12 @@ function P5Sketch(props) {
   //To store user input for color
   const [selectedColor, setSelectedColor] = useState('');
 
-  //To update new user selections
-  const [userSettings, setUserSettings] = useState({
-    newAudio: songFile,
-    newImage: imgFile,
-    newColor: '#000',
-    newStyle: 'Circle',
+  //Visualizer default settings
+  const [defaultVisualizerSettings, setDefaultVisualizerSettings] = useState({
+    defaultAudio: songFile,
+    defaultImage: imgFile,
+    defaultColor: '#000',
+    defaultStyle: 'Circle',
   });
 
   //To toggle drop down menu and user sketch
@@ -53,8 +54,8 @@ function P5Sketch(props) {
     // (without that p5 will render the canvas outside of your component)
     p.createCanvas(canvasWidth, canvasHeight).parent(canvasParentRef);
 
-    song = p.loadSound(userSettings.newAudio, songLoaded);
-    img = p.loadImage(userSettings.newImage, imgLoaded);
+    song = p.loadSound(defaultVisualizerSettings.defaultAudio, songLoaded);
+    img = p.loadImage(defaultVisualizerSettings.defaultImage, imgLoaded);
 
     p.angleMode(p.DEGREES);
 
@@ -168,20 +169,6 @@ function P5Sketch(props) {
     }
   };
 
-  // const handleApplyOptions = () => {
-  //   const uploadedSettings = {
-  //     ...userSettings,
-  //     newAudio: audioFile,
-  //     newImage: imageFile,
-  //     newColor: selectedColor,
-  //     newStyle: selectedStyle,
-  //   };
-
-  //   setUserSettings(uploadedSettings);
-
-  //   // setRemoveCanvas(true);
-  // };
-
   class Particle {
     constructor(p) {
       this.pos = p.constructor.Vector.random2D().mult(250);
@@ -224,13 +211,9 @@ function P5Sketch(props) {
     <>
       <main className="visualizer">
         <div className="visualizer-panel">
-          <VisualizerControls
-            play={play}
-            pause={pause}
-            restart={restart}
-            userSettings={userSettings}
-          />
+          <VisualizerControls play={play} pause={pause} restart={restart} />
         </div>
+
         {/* {removeCanvas ? (
           <UserSketch
             setup={setup}

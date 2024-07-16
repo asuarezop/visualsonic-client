@@ -13,6 +13,7 @@ FONT SIZE SYSTEM (px)
 
 .visualizer {
   width: 100%;
+  max-height: fit-content;
   background-color: $primary-color-lavender;
 
   .visualizer-panel {
@@ -341,6 +342,25 @@ FONT SIZE SYSTEM (px)
       border-top-right-radius: 0.25rem;
       border-bottom-left-radius: 0.25rem;
       border-bottom-right-radius: 0.25rem;
+    }
+  }
+
+  .save-selection {
+    &__btn {
+      background-color: $secondary-color-alabaster;
+      color: $secondary-color-gunmetal;
+      border-top-left-radius: 0.25rem;
+      border-top-right-radius: 0.25rem;
+      border-bottom-left-radius: 0.25rem;
+      border-bottom-right-radius: 0.25rem;
+      margin-top: 2rem;
+      padding: 0.6rem;
+      font-size: 0.875rem;
+
+      &--hover:hover {
+        border: 1px solid $primary-color-lightblue;
+        cursor: pointer;
+      }
     }
   }
 }
