@@ -214,6 +214,20 @@ function P5Sketch(props) {
     }
   }
 
+  // useEffect to handle settings update
+  useEffect(
+    (p) => {
+      if (song) {
+        song.stop();
+        song = p5.loadSound(defaultVisualizerSettings.defaultAudio);
+      }
+      if (img) {
+        img = p5.loadImage(defaultVisualizerSettings.defaultImage);
+      }
+    },
+    [defaultVisualizerSettings]
+  );
+
   return (
     <>
       <main className="visualizer">
