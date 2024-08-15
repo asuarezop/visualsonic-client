@@ -4,13 +4,14 @@ import { useState } from 'react';
 import 'p5/lib/addons/p5.sound';
 import './sketch.scss';
 import { storage } from '../../config/firebase';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { v4 } from 'uuid';
-import UserSketch from '../UserSketch/UserSketch';
+// import UserSketch from '../UserSketch/UserSketch';
 import songFile from '../../assets/sounds/81BPM_Massive_(Original Mix).mp3';
 import imgFile from '../../assets/images/Home Screen Background.jpg';
 import uploadIcon from '../../assets/icons/upload-solid.svg';
 import gearIcon from '../../assets/icons/gear-solid.svg';
+import p5 from 'p5';
 
 //REACT-P5 METHOD (WORKS WITH SOUND LIBRARY)
 //All variables used for below functions must be declared outside the component
@@ -33,6 +34,9 @@ function P5Sketch(props) {
   //To store file URL for reading back data
   const [audioURL, setAudioURL] = useState(null);
   const [imageURL, setImageURL] = useState(null);
+
+  //To show progress bar of user uploaded files
+  const [fileProgress, setFileProgress] = useState(0);
 
   //To update new user selections
   const [userSettings, setUserSettings] = useState({
@@ -58,24 +62,34 @@ function P5Sketch(props) {
       setAudioName(uploadedAudioFile.name);
       setAudioFile(uploadedAudioFile);
 
-      console.log('New audio file loaded:', audioFile);
+      console.log('New audio file loaded:', uploadedAudioFile);
     } catch (err) {
       console.error(err);
     }
   };
 
-  const handleAudioUpload = () => {
+  const handleAudioUpload = async () => {
     if (audioFile == null) {
       return;
     }
 
     const audioRef = ref(storage, `audio/${audioFile.name + v4()}`);
-    uploadBytes(audioRef, audioFile).then((snapshot) => {
+    try {
+      const snapshot = await uploadBytesResumable(audioRef, audioFile);
       alert('New audio file uploaded');
-      getDownloadURL(snapshot.ref).then((url) => {
-        setAudioURL(url);
-      });
-    });
+      // uploadBytes(audioRef, audioFile).then((snapshot) => {
+      //   alert('New audio file uploaded');
+      const url = await getDownloadURL(snapshot.ref);
+      setAudioURL(url);
+      console.log('Audio URL:', url);
+      // getDownloadURL(snapshot.ref).then((url) => {
+      //   setAudioURL(url);
+      //   console.log(audioURL);
+      // });
+      // });
+    } catch (error) {
+      console.log('Error uploading file:', error);
+    }
   };
 
   //Setting user image selection
@@ -91,19 +105,50 @@ function P5Sketch(props) {
     }
   };
 
-  const handleImageUpload = () => {
-    if (imageFile == null) {
+  const handleImageUpload = async () => {
+    if (imageFile == null || !imageFile) {
       return;
     }
 
     const imageRef = ref(storage, `images/${imageFile.name + v4()}`);
-    uploadBytes(imageRef, imageFile).then((snapshot) => {
+    try {
+      const uploadTask = await uploadBytesResumable(imageRef, imageFile);
+
+      //To show progress of uploaded image file
+      uploadTask.task.on(
+        'state_changed',
+        (snapshot) => {
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setFileProgress(progress);
+        },
+        (err) => console.log(err)
+      );
+
       alert('New image file uploaded');
-      getDownloadURL(snapshot.ref).then((url) => {
-        setImageURL(url);
-      });
-    });
+      const url = await getDownloadURL(uploadTask.task.snapshot.ref);
+      setImageURL(url);
+
+      console.log('Old Image URL:', imageURL);
+    } catch (error) {
+      console.log('Error uploading file:', error);
+    }
   };
+
+  /* Need to figure out a way to make newly updated image URL 
+  be available to use for setup function inside p5 
+  -How can I trigger p5 to render things in setup() or preload() a 2nd time or when an event happens?
+  -Can I do this without creating a new p5 instance and if I do, how can I do it properly without React throwing errors?
+  -How can I turn remote URL into relative HTML path:
+    The path to the image should be relative to the HTML file that links in your sketch. 
+    Loading an image from a URL or other remote location may be blocked due to your browser's built-in security.
+  */
+  useEffect(() => {
+    if (imageURL !== null) {
+      console.log('Updated image URL:', imageURL);
+    }
+  }, [imageURL]);
 
   //Setting user visualizer color selection
   function handleColor(e) {
@@ -139,8 +184,10 @@ function P5Sketch(props) {
     // (without that p5 will render the canvas outside of your component)
     p.createCanvas(canvasWidth, canvasHeight).parent(canvasParentRef);
 
-    song = p.loadSound(userSettings.newAudio, songLoaded);
-    img = p.loadImage(userSettings.newImage, imgLoaded);
+    // song = p.loadSound(userSettings.newAudio, songLoaded);
+    // img = p.loadImage(userSettings.newImage, imgLoaded);
+
+    img = p.loadImage(imageURL, imgLoaded);
 
     p.angleMode(p.DEGREES);
 
@@ -151,6 +198,8 @@ function P5Sketch(props) {
     fft = new window.p5.FFT(0.3);
 
     img.filter(p.BLUR, 5);
+
+    p.noLoop();
   };
 
   const draw = (p) => {
@@ -416,6 +465,12 @@ function P5Sketch(props) {
                 <strong className="selected-file__text">Chosen file: </strong>
                 <span id="file-name">{imageName}</span>
               </span>
+              {fileProgress && (
+                <span className="image-progress">
+                  <strong className="image-progress__text">Uploading: %</strong>
+                  <span id="file-progress">{fileProgress} </span>
+                </span>
+              )}
               <div className="visualizer-color">
                 <label htmlFor="visualizerColor" className="form-input__title">
                   Visualizer Color:
