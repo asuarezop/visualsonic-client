@@ -1,7 +1,7 @@
-import { ReactP5Wrapper } from '@p5-wrapper/react';
+import '../P5Sketch/sketch.scss';
+import { ReactP5Wrapper, Sketch } from '@p5-wrapper/react';
 import { Howl, Howler } from 'howler';
 import React, { useEffect, useState } from 'react';
-import 'p5/lib/addons/p5.sound';
 import { v4 } from 'uuid';
 import { storage } from '../../config/firebase.js';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
@@ -9,18 +9,24 @@ import imgFile from '../../assets/images/Home Screen Background.jpg';
 import songFile from '../../assets/sounds/81BPM_Massive_(Original Mix).mp3';
 import uploadIcon from '../../assets/icons/upload-solid.svg';
 import gearIcon from '../../assets/icons/gear-solid.svg';
-import p5, { Amplitude, Color, FFT, File, Image, Vector } from 'p5';
+import * as p5 from 'p5';
+
+(window as any).p5 = p5;
+import('p5/lib/addons/p5.sound');
 
 let canvasWidth = window.innerWidth;
 let canvasHeight = window.innerHeight;
 let song: Howl;
-let img: Image;
-let fft: FFT;
-let amp: number;
+// let song: p5.SoundFile;
+// let img: Image;
+let img: p5.Image;
+let audioElement: HTMLMediaElement | null;
+// let fft: FFT;
+// let amp: number;
 
 //IDEAS FOR FUTURE UI UPDATES:
-/* 
---Input sliders (2x) 
+/*
+--Input sliders (2x)
 1. For controlling blur of background & size (on top left hand side of play button)
 2. For controlling audio volume, muting, playback speeds (on top right hand side of restart button)
 */
@@ -46,15 +52,36 @@ function NewSketch() {
   const [imageName, setImageName] = useState('');
   const [colorName, setColorName] = useState('');
 
-  useEffect(() => {
-    if (imageURL !== null || audioURL !== null) {
-      console.log('Updated image URL:', imageURL);
-      console.log('Updated audio URL:', audioURL);
-    }
-  }, [imageURL, audioURL]);
+  // useEffect(() => {
+  //   if (imageURL !== null || audioURL !== null) {
+  //     console.log('Updated image URL:', imageURL);
+  //     console.log('Updated audio URL:', audioURL);
+  //   }
+  // }, [imageURL, audioURL]);
+  let audioCtx: AudioContext = Howler.ctx;
+  let analyser: AnalyserNode;
+  let source: MediaElementAudioSourceNode;
+  // let sound: p5.SoundFile;
+
+  // useEffect(() => {
+  // if (!audioCtx) {
+  //   audioCtx = new AudioContext();
+  //   const analyser = audioCtx.createAnalyser();
+  //   audioElement = document.getElementById(
+  //     'visualizer-playback'
+  //   )! as HTMLMediaElement;
+  //   const source = audioCtx.createMediaElementSource(audioElement);
+  //   source.connect(analyser);
+  //   analyser.connect(audioCtx.destination);
+  //   analyser.fftSize = 2048;
+  //   const bufferLength = analyser.frequencyBinCount;
+  //   const dataArray = new Uint8Array(bufferLength);
+  //   analyser.getByteTimeDomainData(dataArray);
+  // }
+  // }, [audioCtx]);
 
   function sketch(p5: p5) {
-    function imgLoaded(loadedImg: Image) {
+    function imgLoaded(loadedImg: p5.Image) {
       img = loadedImg;
       console.log('Your image has succesfully loaded');
     }
@@ -66,36 +93,43 @@ function NewSketch() {
 
     //Getting data from our audio using Web Audio API
     // function createAudioAnalyser() {
-    const audioCtx = new AudioContext();
-    const analyser = audioCtx.createAnalyser();
-    // console.log(song._sounds[0]._node);
-    const source = audioCtx.createMediaElementSource(song._sounds[0]._node);
-    source.connect(analyser);
-    analyser.connect(audioCtx.destination);
-
-    analyser.fftSize = 2048;
-
-    //Buffer length is half of FFT size --> 1024
-    const bufferLength = analyser.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
-    analyser.getByteTimeDomainData(dataArray);
+    // if (!audioCtx) {
+    //   audioCtx = new AudioContext();
+    //   const analyser = audioCtx.createAnalyser();
+    //   audioElement = document.getElementById(
+    //     'visualizer-playback'
+    //   )! as HTMLMediaElement;
+    //   const source = audioCtx.createMediaElementSource(audioElement);
+    //   source.connect(analyser);
+    //   analyser.connect(audioCtx.destination);
+    // }
+    // if (source) {
+    //   source.disconnect();
+    // }
+    // analyser.connect(audioCtx.destination);
+    // analyser.fftSize = 2048;
+    // Buffer length is half of FFT size --> 1024
+    // const bufferLength = analyser.frequencyBinCount;
+    // const dataArray = new Uint8Array(bufferLength);
+    // analyser.getByteTimeDomainData(dataArray);
     // }
 
     p5.preload = () => {
       p5.loadImage(imageURL, imgLoaded);
+      // p5.loadSound(songFile, songLoaded);
+      // console.log(p5.loadSound(songFile));
 
       song = new Howl({
         format: ['wav', 'm4a'],
         src: [audioURL],
-        html5: true,
-        // onload: createAudioAnalyser,
+        html5: false,
+        // onload: songLoaded,
       });
     };
 
     p5.setup = () => {
       // let canvasDiv = document.getElementById('visualizer');
       p5.createCanvas(canvasWidth, canvasHeight).parent();
-      // p5.loadSound(songFile, songLoaded);
 
       p5.angleMode(p5.DEGREES);
       p5.imageMode(p5.CENTER);
@@ -103,6 +137,23 @@ function NewSketch() {
 
       //FEATURE: Potential user setting with a slider to control blur of background
       img.filter(p5.BLUR, 1);
+
+      if (source && !audioCtx) {
+        source.disconnect();
+        audioCtx = new AudioContext();
+        analyser = audioCtx.createAnalyser();
+        audioElement = document.getElementById(
+          'visualizer-playback'
+        )! as HTMLMediaElement;
+        source = audioCtx.createMediaElementSource(audioElement);
+        source.connect(analyser);
+        analyser.connect(audioCtx.destination);
+
+        analyser.fftSize = 2048;
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+        analyser.getByteTimeDomainData(dataArray);
+      }
 
       // fft = new window.p5.FFT(0.3);
     };
@@ -116,10 +167,9 @@ function NewSketch() {
       p5.pop();
 
       // let wave = fft.waveform();
-      let wave = analyser.getByteTimeDomainData(dataArray);
 
       // fft.analyze();
-      // amp = analyser.getByteFrequencyData(dataArray);
+
       // amp = fft.getEnergy(20, 200);
       p5.push();
       // if (amp > 242) {
@@ -156,67 +206,67 @@ function NewSketch() {
       //   p5.endShape();
       // }
 
-      let particle = new Particle(p5);
-      let particles: Particle[] = [];
-      particles.push(particle);
+      // let particle = new Particle(p5);
+      // let particles: Particle[] = [];
+      // particles.push(particle);
 
-      for (let i = particles.length - 1; i >= 0; i--) {
-        if (!particles[i].edges()) {
-          particles[i].update(amp > 242);
-          particles[i].show();
-        } else {
-          particles.splice(i, 1);
-        }
-      }
+      // for (let i = particles.length - 1; i >= 0; i--) {
+      //   if (!particles[i].edges()) {
+      //     particles[i].update(amp > 242);
+      //     particles[i].show();
+      //   } else {
+      //     particles.splice(i, 1);
+      //   }
+      // }
     };
 
-    class Particle {
-      pos: Vector;
-      vel: Vector;
-      acc: Vector;
-      w: number;
-      color: number[];
+    // class Particle {
+    //   pos: Vector;
+    //   vel: Vector;
+    //   acc: Vector;
+    //   w: number;
+    //   color: number[];
 
-      constructor(p5: p5) {
-        this.pos = Vector.random2D().mult(250);
-        this.vel = p5.createVector();
-        this.acc = this.pos.copy().mult(p5.random(0.0001, 0.00001));
+    //   constructor(p5: p5) {
+    //     this.pos = Vector.random2D().mult(250);
+    //     this.vel = p5.createVector();
+    //     this.acc = this.pos.copy().mult(p5.random(0.0001, 0.00001));
 
-        this.w = p5.random(3, 5);
-        this.color = [
-          p5.random(200, 255),
-          p5.random(200, 255),
-          p5.random(200, 255),
-        ];
-      }
-      update(condition: boolean): void {
-        this.vel.add(this.acc);
-        this.pos.add(this.vel);
+    //     this.w = p5.random(3, 5);
+    //     this.color = [
+    //       p5.random(200, 255),
+    //       p5.random(200, 255),
+    //       p5.random(200, 255),
+    //     ];
+    //   }
+    //   update(condition: boolean): void {
+    //     this.vel.add(this.acc);
+    //     this.pos.add(this.vel);
 
-        if (condition) {
-          this.pos.add(this.vel);
-          this.pos.add(this.vel);
-          this.pos.add(this.vel);
-        }
-      }
-      edges(): boolean {
-        if (
-          this.pos.x < -canvasWidth / 2 ||
-          this.pos.x > canvasWidth / 2 ||
-          this.pos.y < -canvasHeight / 2 ||
-          this.pos.y > canvasHeight / 2
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-      show(): void {
-        p5.noStroke();
-        p5.fill(this.color);
-        p5.ellipse(this.pos.x, this.pos.y, this.w);
-      }
-    }
+    //     if (condition) {
+    //       this.pos.add(this.vel);
+    //       this.pos.add(this.vel);
+    //       this.pos.add(this.vel);
+    //     }
+    //   }
+    //   edges(): boolean {
+    //     if (
+    //       this.pos.x < -canvasWidth / 2 ||
+    //       this.pos.x > canvasWidth / 2 ||
+    //       this.pos.y < -canvasHeight / 2 ||
+    //       this.pos.y > canvasHeight / 2
+    //     ) {
+    //       return true;
+    //     } else {
+    //       return false;
+    //     }
+    //   }
+    //   show(): void {
+    //     p5.noStroke();
+    //     p5.fill(this.color);
+    //     p5.ellipse(this.pos.x, this.pos.y, this.w);
+    //   }
+    // }
   }
 
   //Setting user song selection
@@ -226,7 +276,7 @@ function NewSketch() {
 
       // if (typeof uploadedAudioFile === 'File') {
       setAudioName(uploadedAudioFile!.name);
-      // setAudioFile(uploadedAudioFile);
+      setAudioFile(uploadedAudioFile);
       console.log('New audio file loaded:', uploadedAudioFile);
       // }
     } catch (err) {
@@ -241,11 +291,11 @@ function NewSketch() {
 
     const audioRef = ref(storage, `audio/${audioFile.name + v4()}`);
     try {
-      // const uploadTask = await uploadBytesResumable(audioRef, audioFile);
+      const uploadTask = await uploadBytesResumable(audioRef, audioFile);
       alert('New audio file uploaded');
 
-      // const url = await getDownloadURL(uploadTask.task.snapshot.ref);
-      // setAudioURL(url);
+      const url = await getDownloadURL(uploadTask.task.snapshot.ref);
+      setAudioURL(url);
       console.log('Old Audio URL:', audioURL);
     } catch (error) {
       console.log('Error uploading file:', error);
@@ -259,7 +309,7 @@ function NewSketch() {
 
       // if (typeof uploadedImageFile === 'File') {
       setImageName(uploadedImageFile!.name);
-      // setImageFile(uploadedImageFile);
+      setImageFile(uploadedImageFile);
       console.log('New image file loaded:', uploadedImageFile);
       // }
     } catch (err) {
@@ -274,7 +324,7 @@ function NewSketch() {
 
     const imageRef = ref(storage, `images/${imageFile.name + v4()}`);
     try {
-      // const uploadTask = await uploadBytesResumable(imageRef, imageFile);
+      const uploadTask = await uploadBytesResumable(imageRef, imageFile);
 
       //To show progress of uploaded image file (doesn't work right now)
       // uploadTask.task.on(
@@ -289,8 +339,8 @@ function NewSketch() {
       // );
 
       alert('New image file uploaded');
-      // const url = await getDownloadURL(uploadTask.task.snapshot.ref);
-      // setImageURL(url);
+      const url = await getDownloadURL(uploadTask.task.snapshot.ref);
+      setImageURL(url);
 
       console.log('Old Image URL:', imageURL);
     } catch (error) {
@@ -307,6 +357,9 @@ function NewSketch() {
     if (!song.playing()) {
       song.play();
     }
+    // if (!song.isPlaying()) {
+    //   song.play();
+    // }
   };
 
   const pause = () => {
@@ -330,6 +383,13 @@ function NewSketch() {
       song.stop();
       song.play();
     }
+    // if (song.isPaused()) {
+    //   song.playMode('restart');
+    //   song.play();
+    // } else {
+    //   song.playMode('restart');
+    //   song.play();
+    // }
   };
 
   return (
@@ -347,7 +407,13 @@ function NewSketch() {
                 alt="Gear cog icon"
               />
             </div>
-            <div id="visualizer-playback" className="visualizer-playback">
+            <audio
+              id="visualizer-playback"
+              src={audioURL}
+              typeof="audio/mpeg"
+              controls
+              className="visualizer-playback"
+            >
               <button className="visualizer-playback__play" onClick={play}>
                 Play
               </button>
@@ -360,7 +426,21 @@ function NewSketch() {
               >
                 Restart
               </button>
-            </div>
+            </audio>
+            {/* <div id="visualizer-playback" className="visualizer-playback">
+              <button className="visualizer-playback__play" onClick={play}>
+                Play
+              </button>
+              <button className="visualizer-playback__pause" onClick={pause}>
+                Pause
+              </button>
+              <button
+                className="visualizer-playback__restart"
+                onClick={restart}
+              >
+                Restart
+              </button>
+            </div> */}
             <div className="visualizer-apply">
               <button
                 // onClick={handleApplyOptions}

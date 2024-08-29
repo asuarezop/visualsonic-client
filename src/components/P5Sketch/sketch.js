@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Sketch from 'react-p5';
 import { useState } from 'react';
+import p5 from 'p5';
 import 'p5/lib/addons/p5.sound';
 import './sketch.scss';
 import { storage } from '../../config/firebase';
@@ -11,13 +12,12 @@ import songFile from '../../assets/sounds/81BPM_Massive_(Original Mix).mp3';
 import imgFile from '../../assets/images/Home Screen Background.jpg';
 import uploadIcon from '../../assets/icons/upload-solid.svg';
 import gearIcon from '../../assets/icons/gear-solid.svg';
-import p5 from 'p5';
+require('p5/lib/addons/p5.sound');
 
 //REACT-P5 METHOD (WORKS WITH SOUND LIBRARY)
 //All variables used for below functions must be declared outside the component
-
-const canvasWidth = window.innerWidth;
-const canvasHeight = window.innerHeight;
+let canvasWidth = window.innerWidth;
+let canvasHeight = window.innerHeight;
 let song;
 let img;
 let fft;
@@ -32,19 +32,19 @@ function P5Sketch(props) {
   const [selectedStyle, setSelectedStyle] = useState('');
 
   //To store file URL for reading back data
-  const [audioURL, setAudioURL] = useState(null);
-  const [imageURL, setImageURL] = useState(null);
+  const [audioURL, setAudioURL] = useState(songFile);
+  const [imageURL, setImageURL] = useState(imgFile);
 
   //To show progress bar of user uploaded files
   const [fileProgress, setFileProgress] = useState(0);
 
   //To update new user selections
-  const [userSettings, setUserSettings] = useState({
-    newAudio: songFile,
-    newImage: imgFile,
-    newColor: '#000',
-    newStyle: 'Circle',
-  });
+  // const [userSettings, setUserSettings] = useState({
+  //   newAudio: songFile,
+  //   newImage: imgFile,
+  //   newColor: '#000',
+  //   newStyle: 'Circle',
+  // });
 
   //To toggle drop down menu and user sketch
   const [dropDown, setDropDown] = useState(false);
@@ -54,6 +54,13 @@ function P5Sketch(props) {
   const [audioName, setAudioName] = useState('');
   const [imageName, setImageName] = useState('');
   const [colorName, setColorName] = useState('');
+
+  useEffect(() => {
+    if (imageURL !== null || audioURL !== null) {
+      console.log('Updated image URL:', imageURL);
+      console.log('Updated audio URL:', audioURL);
+    }
+  }, [imageURL, audioURL]);
 
   //Setting user song selection
   const handleAudioFile = async (e) => {
@@ -69,24 +76,19 @@ function P5Sketch(props) {
   };
 
   const handleAudioUpload = async () => {
-    if (audioFile == null) {
+    if (audioFile == null || !audioFile) {
       return;
     }
 
     const audioRef = ref(storage, `audio/${audioFile.name + v4()}`);
     try {
-      const snapshot = await uploadBytesResumable(audioRef, audioFile);
+      const uploadTask = await uploadBytesResumable(audioRef, audioFile);
       alert('New audio file uploaded');
-      // uploadBytes(audioRef, audioFile).then((snapshot) => {
-      //   alert('New audio file uploaded');
-      const url = await getDownloadURL(snapshot.ref);
+
+      const url = await getDownloadURL(uploadTask.task.snapshot.ref);
       setAudioURL(url);
-      console.log('Audio URL:', url);
-      // getDownloadURL(snapshot.ref).then((url) => {
-      //   setAudioURL(url);
-      //   console.log(audioURL);
-      // });
-      // });
+
+      console.log('Old Audio URL:', audioURL);
     } catch (error) {
       console.log('Error uploading file:', error);
     }
@@ -113,20 +115,19 @@ function P5Sketch(props) {
     const imageRef = ref(storage, `images/${imageFile.name + v4()}`);
     try {
       const uploadTask = await uploadBytesResumable(imageRef, imageFile);
-
-      //To show progress of uploaded image file
-      uploadTask.task.on(
-        'state_changed',
-        (snapshot) => {
-          const progress = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
-          setFileProgress(progress);
-        },
-        (err) => console.log(err)
-      );
-
       alert('New image file uploaded');
+      //To show progress of uploaded image file
+      // uploadTask.task.on(
+      //   'state_changed',
+      //   (snapshot) => {
+      //     const progress = Math.round(
+      //       (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+      //     );
+      //     setFileProgress(progress);
+      //   },
+      //   (err) => console.log(err)
+      // );
+
       const url = await getDownloadURL(uploadTask.task.snapshot.ref);
       setImageURL(url);
 
@@ -136,37 +137,33 @@ function P5Sketch(props) {
     }
   };
 
-  /* Need to figure out a way to make newly updated image URL 
-  be available to use for setup function inside p5 
+  /* Need to figure out a way to make newly updated image URL
+  be available to use for setup function inside p5
   -How can I trigger p5 to render things in setup() or preload() a 2nd time or when an event happens?
   -Can I do this without creating a new p5 instance and if I do, how can I do it properly without React throwing errors?
   -How can I turn remote URL into relative HTML path:
-    The path to the image should be relative to the HTML file that links in your sketch. 
+    The path to the image should be relative to the HTML file that links in your sketch.
     Loading an image from a URL or other remote location may be blocked due to your browser's built-in security.
   */
-  useEffect(() => {
-    if (imageURL !== null) {
-      console.log('Updated image URL:', imageURL);
-    }
-  }, [imageURL]);
 
   //Setting user visualizer color selection
-  function handleColor(e) {
-    const visualizerColor = e.target.value;
-    setColorName(visualizerColor);
-    setSelectedColor(visualizerColor);
-    console.log('New visualizer color loaded:', e.target.value);
-  }
+  // function handleColor(e) {
+  //   const visualizerColor = e.target.value;
+  //   setColorName(visualizerColor);
+  //   setSelectedColor(visualizerColor);
+  //   console.log('New visualizer color loaded:', e.target.value);
+  // }
 
-  //Setting user visualizer style selection
-  function handleStyleChange(e) {
-    const visualizerStyle = e.target.value;
-    setSelectedStyle(visualizerStyle);
-    console.log('New visualizer style loaded:', visualizerStyle);
-  }
+  // //Setting user visualizer style selection
+  // function handleStyleChange(e) {
+  //   const visualizerStyle = e.target.value;
+  //   setSelectedStyle(visualizerStyle);
+  //   console.log('New visualizer style loaded:', visualizerStyle);
+  // }
 
   const preload = (p) => {
-    p.soundFormats('mp3', 'wav', 'm4a');
+    // p.soundFormats('mp3', 'wav', 'm4a');
+    img = p.loadImage(imageURL, imgLoaded);
   };
 
   function songLoaded(song) {
@@ -183,55 +180,51 @@ function P5Sketch(props) {
     // use parent to render the canvas in this ref
     // (without that p5 will render the canvas outside of your component)
     p.createCanvas(canvasWidth, canvasHeight).parent(canvasParentRef);
+    song = p.loadSound(audioURL, songLoaded);
 
     // song = p.loadSound(userSettings.newAudio, songLoaded);
     // img = p.loadImage(userSettings.newImage, imgLoaded);
 
-    img = p.loadImage(imageURL, imgLoaded);
-
     p.angleMode(p.DEGREES);
-
     p.imageMode(p.CENTER);
-
     p.rectMode(p.CENTER);
 
     fft = new window.p5.FFT(0.3);
 
-    img.filter(p.BLUR, 5);
+    // img.filter(p.BLUR, 5);
 
-    p.noLoop();
+    // p.noLoop();
   };
 
   const draw = (p) => {
-    if (removeCanvas) {
-      p.remove();
-    }
+    // if (removeCanvas) {
+    //   p.remove();
+    // }
 
     p.background(0);
 
     //Make changes to waveform stroke line here:
     p.stroke(selectedColor);
-
     p.noFill();
 
-    let wave = fft.waveform();
+    // let wave = fft.waveform();
 
     p.translate(canvasWidth / 2, canvasHeight / 2);
 
-    fft.analyze();
+    // fft.analyze();
 
-    amp = fft.getEnergy(20, 200);
+    // amp = fft.getEnergy(20, 200);
 
     p.push();
-    if (amp > 242) {
-      p.rotate(p.random(-0.2, 0.2));
-    }
+    // if (amp > 242) {
+    //   p.rotate(p.random(-0.2, 0.2));
+    // }
 
     p.image(img, 0, 0, canvasWidth + 100, canvasHeight + 100);
     p.pop();
 
-    let alpha = p.map(amp, 0, 255, 180, 150);
-    p.fill(0, alpha);
+    // let alpha = p.map(amp, 0, 255, 180, 150);
+    // p.fill(0, alpha);
     p.noStroke();
     p.rect(0, 0, canvasWidth, canvasHeight);
 
@@ -239,37 +232,37 @@ function P5Sketch(props) {
     p.strokeWeight(2);
     p.noFill();
 
-    for (let t = -1; t <= 1; t += 2) {
-      p.beginShape();
+    // for (let t = -1; t <= 1; t += 2) {
+    //   p.beginShape();
 
-      for (let i = 0; i < 180; i += 0.5) {
-        //Specifiying to use the audio of the waveform as index, must be converted to an integer
-        let index = p.floor(p.map(i, 0, canvasWidth, 180, wave.length - 1));
+    //   for (let i = 0; i < 180; i += 0.5) {
+    //     //Specifiying to use the audio of the waveform as index, must be converted to an integer
+    //     let index = p.floor(p.map(i, 0, canvasWidth, 180, wave.length - 1));
 
-        //r (radius) mapped to wave index, with minimum and maximum radians of circle in last two arguments
-        let r = p.map(wave[index], -1, 1, 150, 350);
+    //     //r (radius) mapped to wave index, with minimum and maximum radians of circle in last two arguments
+    //     let r = p.map(wave[index], -1, 1, 150, 350);
 
-        //x position be equal to radius(r) times sin(), times (t) variable to create both sides of visualizer
-        let x = r * p.sin(i) * t;
-        //y position be equal to radius(r) times cos(), polar coordinates Y
-        let y = r * p.cos(i);
-        //change the line shape of waveform
-        p.vertex(x, y);
-      }
-      p.endShape();
-    }
+    //     //x position be equal to radius(r) times sin(), times (t) variable to create both sides of visualizer
+    //     let x = r * p.sin(i) * t;
+    //     //y position be equal to radius(r) times cos(), polar coordinates Y
+    //     let y = r * p.cos(i);
+    //     //change the line shape of waveform
+    //     p.vertex(x, y);
+    //   }
+    //   p.endShape();
+    // }
 
-    let particle = new Particle(p);
-    particles.push(particle);
+    // let particle = new Particle(p);
+    // particles.push(particle);
 
-    for (let i = particles.length - 1; i >= 0; i--) {
-      if (!particles[i].edges()) {
-        particles[i].update(amp > 242, p);
-        particles[i].show(p);
-      } else {
-        particles.splice(i, 1);
-      }
-    }
+    // for (let i = particles.length - 1; i >= 0; i--) {
+    //   if (!particles[i].edges()) {
+    //     particles[i].update(amp > 242, p);
+    //     particles[i].show(p);
+    //   } else {
+    //     particles.splice(i, 1);
+    //   }
+    // }
   };
 
   //Visualizer controls
@@ -303,57 +296,57 @@ function P5Sketch(props) {
     }
   };
 
-  const handleApplyOptions = () => {
-    const uploadedSettings = {
-      ...userSettings,
-      newAudio: audioFile,
-      newImage: imageFile,
-      newColor: selectedColor,
-      newStyle: selectedStyle,
-    };
+  // const handleApplyOptions = () => {
+  //   const uploadedSettings = {
+  //     ...userSettings,
+  //     newAudio: audioFile,
+  //     newImage: imageFile,
+  //     newColor: selectedColor,
+  //     newStyle: selectedStyle,
+  //   };
 
-    setUserSettings(uploadedSettings);
+  //   setUserSettings(uploadedSettings);
 
-    setRemoveCanvas(true);
-  };
+  //   setRemoveCanvas(true);
+  // };
 
-  class Particle {
-    constructor(p) {
-      this.pos = p.constructor.Vector.random2D().mult(250);
-      this.vel = p.createVector();
-      this.acc = this.pos.copy().mult(p.random(0.0001, 0.00001));
+  // class Particle {
+  //   constructor(p) {
+  //     this.pos = p.constructor.Vector.random2D().mult(250);
+  //     this.vel = p.createVector();
+  //     this.acc = this.pos.copy().mult(p.random(0.0001, 0.00001));
 
-      this.w = p.random(3, 5);
-      this.color = [p.random(200, 255), p.random(200, 255), p.random(200, 255)];
-    }
-    update(condition) {
-      this.vel.add(this.acc);
-      this.pos.add(this.vel);
+  //     this.w = p.random(3, 5);
+  //     this.color = [p.random(200, 255), p.random(200, 255), p.random(200, 255)];
+  //   }
+  //   update(condition) {
+  //     this.vel.add(this.acc);
+  //     this.pos.add(this.vel);
 
-      if (condition) {
-        this.pos.add(this.vel);
-        this.pos.add(this.vel);
-        this.pos.add(this.vel);
-      }
-    }
-    edges() {
-      if (
-        this.pos.x < -canvasWidth / 2 ||
-        this.pos.x > canvasWidth / 2 ||
-        this.pos.y < -canvasHeight / 2 ||
-        this.pos.y > canvasHeight / 2
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    show(p) {
-      p.noStroke();
-      p.fill(this.color);
-      p.ellipse(this.pos.x, this.pos.y, this.w);
-    }
-  }
+  //     if (condition) {
+  //       this.pos.add(this.vel);
+  //       this.pos.add(this.vel);
+  //       this.pos.add(this.vel);
+  //     }
+  //   }
+  //   edges() {
+  //     if (
+  //       this.pos.x < -canvasWidth / 2 ||
+  //       this.pos.x > canvasWidth / 2 ||
+  //       this.pos.y < -canvasHeight / 2 ||
+  //       this.pos.y > canvasHeight / 2
+  //     ) {
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   }
+  //   show(p) {
+  //     p.noStroke();
+  //     p.fill(this.color);
+  //     p.ellipse(this.pos.x, this.pos.y, this.w);
+  //   }
+  // }
 
   return (
     <>
@@ -386,7 +379,7 @@ function P5Sketch(props) {
             </div>
             <div className="visualizer-apply">
               <button
-                onClick={handleApplyOptions}
+                // onClick={handleApplyOptions}
                 className="visualizer-apply__btn"
               >
                 Apply
@@ -480,7 +473,7 @@ function P5Sketch(props) {
                     type="color"
                     name="visualizerColor"
                     placeholder="Choose your visualizer color"
-                    onChange={handleColor}
+                    // onChange={handleColor}
                   ></input>
                 </label>
               </div>
@@ -494,7 +487,7 @@ function P5Sketch(props) {
                 <select
                   className="selected-style__options"
                   id="visualizerListings"
-                  onChange={handleStyleChange}
+                  // onChange={handleStyleChange}
                   value={selectedStyle}
                 >
                   <option value="bar">Bar visualizer</option>
