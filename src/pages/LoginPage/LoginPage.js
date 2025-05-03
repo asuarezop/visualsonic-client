@@ -4,11 +4,13 @@ import {
   auth,
   googleProvider,
   microsoftProvider,
+  facebookProvider,
 } from '../../config/firebase.js';
 import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import visualizerGif from '../../assets/images/ncs.gif';
 import googleIcon from '../../assets/icons/logo-google.svg';
 import microsoftIcon from '../../assets/icons/microsoft.png';
+import facebookIcon from '../../assets/icons/facebook-app-symbol.png';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
@@ -40,6 +42,16 @@ function LoginPage() {
       console.log(result.user);
     } catch (err) {
       console.log('Error during Microsoft sign-in:', err);
+      throw err;
+    }
+  };
+
+  const signInFacebook = async () => {
+    try {
+      const result = await signInWithPopup(auth, facebookProvider);
+      console.log(result.user);
+    } catch (err) {
+      console.log('Error during Facebook sign-in:', err);
       throw err;
     }
   };
@@ -110,6 +122,17 @@ function LoginPage() {
                 alt="Microsoft Logo"
               />
               <p className="login-provider__text">MICROSOFT</p>
+            </button>
+            <button
+              className="login-provider login-provider--cta"
+              onClick={signInFacebook}
+            >
+              <img
+                className="login-provider__logo"
+                src={facebookIcon}
+                alt="Facebook Logo"
+              />
+              <p className="login-provider__text">FACEBOOK</p>
             </button>
           </div>
         </div>
