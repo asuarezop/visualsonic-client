@@ -128,10 +128,7 @@ FONT SIZE SYSTEM (px)
       }
 
       .login-provider {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 9vw;
+        width: 10vw;
         background-color: $primary-color-white;
         padding: 0.6rem;
         border: 1px solid $secondary-color-lightblack;
@@ -151,7 +148,7 @@ FONT SIZE SYSTEM (px)
         }
 
         &__text {
-          font-size: 1rem;
+          font-size: 0.875rem;
           font-weight: 600;
           color: $primary-color-black;
         }

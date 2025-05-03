@@ -1,9 +1,14 @@
 import './LoginPage.scss';
 import { useState } from 'react';
-import { auth, googleProvider } from '../../config/firebase';
+import {
+  auth,
+  googleProvider,
+  microsoftProvider,
+} from '../../config/firebase.js';
 import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import visualizerGif from '../../assets/images/ncs.gif';
 import googleIcon from '../../assets/icons/logo-google.svg';
+import microsoftIcon from '../../assets/icons/microsoft.png';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
@@ -26,6 +31,16 @@ function LoginPage() {
       await signInWithPopup(auth, googleProvider);
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const signInMicrosoft = async () => {
+    try {
+      const result = await signInWithPopup(auth, microsoftProvider);
+      console.log(result.user);
+    } catch (err) {
+      console.log('Error during Microsoft sign-in:', err);
+      throw err;
     }
   };
 
@@ -84,6 +99,17 @@ function LoginPage() {
                 alt="Google Logo"
               />
               <p className="login-provider__text">GOOGLE</p>
+            </button>
+            <button
+              className="login-provider login-provider--cta"
+              onClick={signInMicrosoft}
+            >
+              <img
+                className="login-provider__logo"
+                src={microsoftIcon}
+                alt="Microsoft Logo"
+              />
+              <p className="login-provider__text">MICROSOFT</p>
             </button>
           </div>
         </div>
