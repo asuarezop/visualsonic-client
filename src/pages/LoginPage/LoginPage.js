@@ -1,12 +1,12 @@
 import './LoginPage.scss';
 import { useState } from 'react';
+import { auth } from '../../firebase/firebase.js';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import {
-  auth,
-  googleProvider,
-  microsoftProvider,
-  facebookProvider,
-} from '../../config/firebase.js';
-import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+  signInGoogle,
+  signInMicrosoft,
+  signInFacebook,
+} from '../../features/auth/signInProviders';
 import visualizerGif from '../../assets/images/ncs.gif';
 import googleIcon from '../../assets/icons/logo-google.svg';
 import microsoftIcon from '../../assets/icons/microsoft.png';
@@ -20,39 +20,11 @@ function LoginPage() {
     e.preventDefault();
   };
 
-  const signIn = async () => {
+  const signInEmailAcct = async () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
     } catch (err) {
       console.error(err);
-    }
-  };
-
-  const signInGoogle = async () => {
-    try {
-      await signInWithPopup(auth, googleProvider);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const signInMicrosoft = async () => {
-    try {
-      const result = await signInWithPopup(auth, microsoftProvider);
-      console.log(result.user);
-    } catch (err) {
-      console.log('Error during Microsoft sign-in:', err);
-      throw err;
-    }
-  };
-
-  const signInFacebook = async () => {
-    try {
-      const result = await signInWithPopup(auth, facebookProvider);
-      console.log(result.user);
-    } catch (err) {
-      console.log('Error during Facebook sign-in:', err);
-      throw err;
     }
   };
 
@@ -92,7 +64,7 @@ function LoginPage() {
               <button
                 className="form-button__submit form-button__submit--cta"
                 type="submit"
-                onClick={signIn}
+                onClick={signInEmailAcct}
               >
                 Sign In
               </button>
