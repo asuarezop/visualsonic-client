@@ -1,12 +1,12 @@
 import './LoginPage.scss';
 import { useState } from 'react';
 import { auth } from '../../firebase/firebase.js';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
 import {
+  signInEmailAcct,
   signInGoogle,
   signInMicrosoft,
   signInFacebook,
-} from '../../features/auth/signInProviders';
+} from '../../features/auth/signInProviders.js';
 import visualizerGif from '../../assets/images/ncs.gif';
 import googleIcon from '../../assets/icons/logo-google.svg';
 import microsoftIcon from '../../assets/icons/microsoft.png';
@@ -18,14 +18,7 @@ function LoginPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  };
-
-  const signInEmailAcct = async () => {
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-    } catch (err) {
-      console.error(err);
-    }
+    signInEmailAcct(auth, email, password);
   };
 
   return (
@@ -64,7 +57,6 @@ function LoginPage() {
               <button
                 className="form-button__submit form-button__submit--cta"
                 type="submit"
-                onClick={signInEmailAcct}
               >
                 Sign In
               </button>
