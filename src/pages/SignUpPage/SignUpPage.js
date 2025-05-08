@@ -1,10 +1,31 @@
-import "./SignUpPage.scss";
-import visualizerGif from "../../assets/images/ncs.gif";
+import './SignUpPage.scss';
+import visualizerGif from '../../assets/images/ncs.gif';
+import { useState } from 'react';
+import { auth } from '../../firebase/firebase.js';
+import { registerUser } from '../../features/auth/emailAuth.js';
+import { useNavigate } from 'react-router-dom';
 
 function SignUpPage() {
-  function handleSubmit(e) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [retypePass, setRetypePass] = useState('');
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-  }
+
+    //Validate input fields were correct
+    if (!email || !password) {
+      console.log('Email and password are required to register.');
+      return;
+    }
+
+    //Create new user
+    registerUser(auth, email, password);
+    navigate('/login');
+  };
 
   return (
     <>
@@ -25,6 +46,7 @@ function SignUpPage() {
                   type="text"
                   name="firstName"
                   placeholder="First name"
+                  onChange={(e) => setFirstName(e.target.value)}
                 ></input>
               </label>
             </div>
@@ -37,6 +59,7 @@ function SignUpPage() {
                   type="text"
                   name="lastName"
                   placeholder="Last name"
+                  onChange={(e) => setLastName(e.target.value)}
                 ></input>
               </label>
             </div>
@@ -49,6 +72,7 @@ function SignUpPage() {
                   type="text"
                   name="email"
                   placeholder="joe@gmail.com"
+                  onChange={(e) => setEmail(e.target.value)}
                 ></input>
               </label>
             </div>
@@ -61,6 +85,7 @@ function SignUpPage() {
                   type="password"
                   name="password"
                   placeholder="Password must have at least 8 characters"
+                  onChange={(e) => setPassword(e.target.value)}
                 ></input>
               </label>
             </div>
@@ -73,6 +98,7 @@ function SignUpPage() {
                   type="password"
                   name="confirmPassword"
                   placeholder="Retype password"
+                  onChange={(e) => setRetypePass(e.target.value)}
                 ></input>
               </label>
             </div>
