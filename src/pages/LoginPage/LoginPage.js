@@ -1,5 +1,6 @@
 import './LoginPage.scss';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { auth } from '../../firebase/firebase.js';
 import {
   signInEmailAcct,
@@ -53,14 +54,16 @@ function LoginPage() {
                 ></input>
               </label>
             </div>
-            <div className="form-button">
-              <button
-                className="form-button__submit form-button__submit--cta"
-                type="submit"
-              >
-                Sign In
-              </button>
-            </div>
+            <Link to="/visualizer">
+              <div className="form-button">
+                <button
+                  className="form-button__submit form-button__submit--cta"
+                  type="submit"
+                >
+                  Sign In
+                </button>
+              </div>
+            </Link>
             <hr className="form__divider"></hr>
           </form>
           <div className="login-option">
