@@ -1,6 +1,24 @@
 import './ForgotPassPage.scss';
+import { useState } from 'react';
+import { auth } from '../../firebase/firebase.js';
+import { useNavigate } from 'react-router-dom';
+import { forgotPassword } from '../../features/auth/passAuth.js';
 
 export default function ForgotPassPage() {
+  const [email, setEmail] = useState('');
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      forgotPassword(auth, email);
+      navigate('/login');
+    } catch (err) {
+      console.error('Failed to reset password:', err.message);
+    }
+  };
+
   return (
     <>
       <section className="forgot-pass">
@@ -10,7 +28,7 @@ export default function ForgotPassPage() {
             Enter the email associated with your account and we'll send you an
             email with instructions to reset your password.
           </p>
-          <form className="form">
+          <form className="form" onSubmit={handleSubmit}>
             <div className="form-input">
               <label className="form-input__title">
                 <input
@@ -19,13 +37,14 @@ export default function ForgotPassPage() {
                   type="text"
                   name="email"
                   placeholder="Email"
+                  onChange={(e) => setEmail(e.target.value)}
                 ></input>
               </label>
             </div>
             <div className="form-button">
               <button
                 className="form-button__reset form-button__reset--cta"
-                type="reset"
+                type="submit"
               >
                 Reset Password
               </button>
