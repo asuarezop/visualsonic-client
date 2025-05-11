@@ -70,6 +70,12 @@ function LoginPage() {
               >
                 Sign In
               </button>
+              <button
+                className="form-button__forgot form-button__forgot--reset"
+                type="reset"
+              >
+                Forgot Password
+              </button>
             </div>
             <hr className="form__divider"></hr>
           </form>
