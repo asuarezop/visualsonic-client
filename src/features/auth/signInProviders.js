@@ -10,16 +10,7 @@ import {
   FacebookAuthProvider,
   linkWithRedirect,
   getRedirectResult,
-  signInWithEmailAndPassword,
 } from 'firebase/auth';
-
-export const signInEmailAcct = async (auth, email, password) => {
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-  } catch (err) {
-    console.error(err);
-  }
-};
 
 export const signInGoogle = async () => {
   try {
