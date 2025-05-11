@@ -1,13 +1,13 @@
 import './LoginPage.scss';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { auth } from '../../firebase/firebase.js';
 import {
-  signInEmailAcct,
   signInGoogle,
   signInMicrosoft,
   signInFacebook,
 } from '../../features/auth/signInProviders.js';
+import { loginUserWithEmailAndPassword } from '../../features/auth/emailAuth.js';
 import visualizerGif from '../../assets/images/ncs.gif';
 import googleIcon from '../../assets/icons/logo-google.svg';
 import microsoftIcon from '../../assets/icons/microsoft.png';
@@ -16,10 +16,19 @@ import facebookIcon from '../../assets/icons/facebook-app-symbol.png';
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    signInEmailAcct(auth, email, password);
+    try {
+      const user = await loginUserWithEmailAndPassword(auth, email, password);
+
+      if (user.emailVerified === true) {
+        navigate('/visualizer');
+      }
+    } catch (err) {
+      console.error('Login failed:', err.message);
+    }
   };
 
   return (
@@ -54,16 +63,14 @@ function LoginPage() {
                 ></input>
               </label>
             </div>
-            <Link to="/visualizer">
-              <div className="form-button">
-                <button
-                  className="form-button__submit form-button__submit--cta"
-                  type="submit"
-                >
-                  Sign In
-                </button>
-              </div>
-            </Link>
+            <div className="form-button">
+              <button
+                className="form-button__submit form-button__submit--cta"
+                type="submit"
+              >
+                Sign In
+              </button>
+            </div>
             <hr className="form__divider"></hr>
           </form>
           <div className="login-option">
