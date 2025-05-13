@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage/LoginPage.js';
 import SignUpPage from './pages/SignUpPage/SignUpPage.js';
 import VisualizerPage from './pages/VisualizerPage/VIsualizerPage.js';
 import ForgotPassPage from './pages/ForgotPassPage/ForgotPassPage.js';
+import EmailNotifyPage from './pages/EmailNotifyPage/EmailNotifyPage.js';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/login" element={<LoginPage />}></Route>
           <Route path="/signup" element={<SignUpPage />}></Route>
           <Route path="/forgot-pass" element={<ForgotPassPage />}></Route>
+          <Route path="/email-notify" element={<EmailNotifyPage />}></Route>
         </Routes>
       </BrowserRouter>
     </>
