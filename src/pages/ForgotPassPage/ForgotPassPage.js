@@ -13,7 +13,7 @@ export default function ForgotPassPage() {
 
     try {
       forgotPassword(auth, email);
-      navigate('/login');
+      navigate('/email-notify');
     } catch (err) {
       console.error('Failed to reset password:', err.message);
     }
